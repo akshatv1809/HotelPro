@@ -66,9 +66,9 @@ const Login = () => {
       <div className="container" style={{ maxWidth: '480px' }}>
         <div className="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
           <div className="text-center mb-4">
-            <span className="fs-1">🏨</span>
-            <h2 className="fw-bold font-serif mt-2 mb-1 text-navy">Welcome to HotelPro</h2>
-            <p className="text-muted small">Sign in to manage your bookings and luxury privileges</p>
+            <span className="fs-1">🏛️</span>
+            <h2 className="fw-bold font-serif mt-2 mb-1 text-navy">Welcome to HotelPro Palaces</h2>
+            <p className="text-muted small">🙏 Namaste &bull; Sign in to manage your royal reservations</p>
           </div>
 
           {error && <AlertMessage variant="danger" message={error} onClose={() => setError('')} />}

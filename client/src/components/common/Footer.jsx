@@ -20,57 +20,60 @@ const Footer = () => {
           {/* Brand Info */}
           <div className="col-lg-4 col-md-6">
             <div className="d-flex align-items-center gap-2 mb-3">
-              <span className="fs-3">🏨</span>
+              <span className="fs-3">🏛️</span>
               <span className="brand-title text-white">
                 Hotel<span style={{ color: 'var(--hotel-gold)' }}>Pro</span>
               </span>
             </div>
-            <p className="text-light opacity-75 small pe-lg-4">
-              Where timeless luxury meets modern hospitality. Experience exquisite suites, world-class dining, and tailored concierge care designed for memorable stays.
+            <p className="text-light opacity-75 small pe-lg-4 mb-2">
+              <strong>अतिथि देवो भव: (Atithi Devo Bhava)</strong> — Experience the timeless opulence of royal Indian hospitality. From regal palace suites overlooking lake vistas to restorative Ayurvedic wellness therapies.
             </p>
-            <div className="d-flex gap-3 fs-5 mt-3 text-light">
+            <small className="text-warning d-block mb-3">
+              Udaipur &bull; Jaipur &bull; Kerala Backwaters &bull; Goa
+            </small>
+            <div className="d-flex gap-3 fs-5 text-light">
               <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-facebook"></i></a>
               <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-instagram"></i></a>
               <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-twitter-x"></i></a>
-              <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-linkedin"></i></a>
+              <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-youtube"></i></a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="col-lg-2 col-md-6">
             <h6 className="text-uppercase fw-bold mb-3" style={{ color: 'var(--hotel-gold)' }}>
-              Quick Links
+              Explore
             </h6>
             <ul className="list-unstyled d-flex flex-column gap-2 small">
               <li><Link to="/" className="text-light text-decoration-none opacity-75">Home</Link></li>
-              <li><Link to="/rooms" className="text-light text-decoration-none opacity-75">Rooms & Suites</Link></li>
-              <li><Link to="/about" className="text-light text-decoration-none opacity-75">About HotelPro</Link></li>
-              <li><Link to="/contact" className="text-light text-decoration-none opacity-75">Contact & Support</Link></li>
-              <li><Link to="/dashboard" className="text-light text-decoration-none opacity-75">Customer Dashboard</Link></li>
+              <li><Link to="/rooms" className="text-light text-decoration-none opacity-75">Palaces & Suites</Link></li>
+              <li><Link to="/about" className="text-light text-decoration-none opacity-75">Royal Heritage</Link></li>
+              <li><Link to="/contact" className="text-light text-decoration-none opacity-75">Concierge & FAQ</Link></li>
+              <li><Link to="/dashboard" className="text-light text-decoration-none opacity-75">Guest Portal</Link></li>
             </ul>
           </div>
 
           {/* Contact Details */}
           <div className="col-lg-3 col-md-6">
             <h6 className="text-uppercase fw-bold mb-3" style={{ color: 'var(--hotel-gold)' }}>
-              Concierge Desk
+              Palace Concierge
             </h6>
             <ul className="list-unstyled d-flex flex-column gap-2 small text-light opacity-75">
               <li className="d-flex gap-2">
                 <i className="bi bi-geo-alt-fill text-warning"></i>
-                <span>742 Evergreen Grand Avenue, Coastal Bay, CA 90210</span>
+                <span>HotelPro Grand Palace, Lake Pichola Road, Udaipur, Rajasthan 313001, India</span>
               </li>
               <li className="d-flex gap-2">
                 <i className="bi bi-telephone-fill text-warning"></i>
-                <span>+1 (800) 555-HOTEL (46835)</span>
+                <span>+91 (0294) 555-4683 / +91 98110 23456</span>
               </li>
               <li className="d-flex gap-2">
                 <i className="bi bi-envelope-fill text-warning"></i>
-                <span>reservations@hotelpro.com</span>
+                <span>namaste@hotelpro.in</span>
               </li>
               <li className="d-flex gap-2">
                 <i className="bi bi-clock-fill text-warning"></i>
-                <span>24/7 Front Desk & Concierge</span>
+                <span>24/7 Royal Khidmatgar & Front Desk</span>
               </li>
             </ul>
           </div>
@@ -78,14 +81,14 @@ const Footer = () => {
           {/* Newsletter Form */}
           <div className="col-lg-3 col-md-6">
             <h6 className="text-uppercase fw-bold mb-3" style={{ color: 'var(--hotel-gold)' }}>
-              Exclusive Offers
+              Royal Privileges
             </h6>
             <p className="text-light opacity-75 small">
-              Subscribe to receive private invitations, seasonal privileges, and member rates.
+              Join the HotelPro Royal Circle for festive season privileges, heritage retreat invitations, and member tariffs.
             </p>
             {subscribed ? (
               <div className="alert alert-success py-2 px-3 small rounded-3">
-                <i className="bi bi-check-circle me-1"></i> Welcome to the HotelPro Club!
+                <i className="bi bi-check-circle me-1"></i> Namaste! Welcome to Royal Privileges.
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="d-flex flex-column gap-2">
@@ -94,7 +97,7 @@ const Footer = () => {
                     type="email"
                     required
                     className="form-control form-control-sm"
-                    placeholder="Your email address"
+                    placeholder="Enter email address"
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
                   />
@@ -103,7 +106,7 @@ const Footer = () => {
                   </button>
                 </div>
                 <small className="text-muted" style={{ fontSize: '0.75rem' }}>
-                  No spam. Unsubscribe anytime.
+                  Compliant with Indian digital privacy guidelines.
                 </small>
               </form>
             )}
@@ -114,14 +117,14 @@ const Footer = () => {
 
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 small text-light opacity-75">
           <p className="mb-0">
-            &copy; {new Date().getFullYear()} HotelPro Resort & Residences. All rights reserved.
+            &copy; {new Date().getFullYear()} HotelPro Palaces & Resorts Pvt. Ltd. All rights reserved. GST Registered.
           </p>
           <div className="d-flex gap-3">
             <a href="#privacy" className="text-light text-decoration-none">Privacy Policy</a>
             <span>&bull;</span>
-            <a href="#terms" className="text-light text-decoration-none">Terms of Service</a>
+            <a href="#terms" className="text-light text-decoration-none">Terms of Stay</a>
             <span>&bull;</span>
-            <a href="#accessibility" className="text-light text-decoration-none">Accessibility</a>
+            <a href="#tariffs" className="text-light text-decoration-none">Govt ID Norms</a>
           </div>
         </div>
       </div>

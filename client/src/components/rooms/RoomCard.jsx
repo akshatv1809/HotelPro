@@ -10,6 +10,8 @@ const RoomCard = ({ room }) => {
       ? room.images[0]
       : 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80';
 
+  const formattedPrice = Number(room.pricePerNight || 0).toLocaleString('en-IN');
+
   return (
     <div className="card hotel-card h-100 d-flex flex-column border-0">
       {/* Room Image Container */}
@@ -24,7 +26,7 @@ const RoomCard = ({ room }) => {
           <span className="badge badge-gold shadow-sm">{room.type}</span>
           {room.featured && (
             <span className="badge bg-warning text-dark shadow-sm">
-              <i className="bi bi-star-fill me-1"></i> Featured
+              <i className="bi bi-star-fill me-1"></i> Royal Heritage
             </span>
           )}
         </div>
@@ -48,7 +50,7 @@ const RoomCard = ({ room }) => {
         <div>
           <div className="d-flex justify-content-between align-items-center mb-2">
             <small className="text-muted fw-semibold">
-              <i className="bi bi-door-closed me-1"></i> Room {room.roomNumber}
+              <i className="bi bi-door-closed me-1 text-primary"></i> Suite #{room.roomNumber}
             </small>
             <StarRating rating={room.rating || 4.8} />
           </div>
@@ -69,15 +71,15 @@ const RoomCard = ({ room }) => {
           {/* Quick Specs */}
           <div className="d-flex flex-wrap gap-3 py-2 border-top border-bottom mb-3 text-muted small">
             <div>
-              <i className="bi bi-people me-1 text-primary"></i>
+              <i className="bi bi-people me-1 text-warning"></i>
               <span>Up to {room.capacity} Guests</span>
             </div>
             <div>
-              <i className="bi bi-aspect-ratio me-1 text-primary"></i>
-              <span>{room.roomSize || 40} m²</span>
+              <i className="bi bi-aspect-ratio me-1 text-warning"></i>
+              <span>{room.roomSize || 50} m²</span>
             </div>
             <div>
-              <i className="bi bi-moon-stars me-1 text-primary"></i>
+              <i className="bi bi-moon-stars me-1 text-warning"></i>
               <span>{room.bedType || 'King Bed'}</span>
             </div>
           </div>
@@ -105,22 +107,22 @@ const RoomCard = ({ room }) => {
           </div>
         </div>
 
-        {/* Price & Action */}
+        {/* Price in INR & Action */}
         <div className="d-flex justify-content-between align-items-center pt-2">
           <div>
-            <span className="text-muted small">Starting from</span>
+            <span className="text-muted small">Tariff per night</span>
             <div className="d-flex align-items-baseline gap-1">
-              <span className="fs-4 fw-bold font-serif" style={{ color: 'var(--hotel-navy)' }}>
-                ${room.pricePerNight}
+              <span className="fs-4 fw-bold font-serif" style={{ color: 'var(--hotel-royal)' }}>
+                ₹{formattedPrice}
               </span>
-              <span className="text-muted small">/ night</span>
+              <span className="text-muted small">+ taxes</span>
             </div>
           </div>
           <Link
             to={`/rooms/${room._id}`}
             className="btn btn-navy btn-sm px-3 py-2 d-flex align-items-center gap-1 shadow-sm"
           >
-            <span>View Details</span>
+            <span>Explore Suite</span>
             <i className="bi bi-arrow-right"></i>
           </Link>
         </div>

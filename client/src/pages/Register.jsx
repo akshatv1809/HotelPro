@@ -64,8 +64,8 @@ const Register = () => {
       <div className="container" style={{ maxWidth: '520px' }}>
         <div className="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
           <div className="text-center mb-4">
-            <span className="fs-1">🏨</span>
-            <h2 className="fw-bold font-serif mt-2 mb-1 text-navy">Join HotelPro Club</h2>
+            <span className="fs-1">🏛️</span>
+            <h2 className="fw-bold font-serif mt-2 mb-1 text-navy">Join HotelPro Royal Circle</h2>
             <p className="text-muted small">
               Create an account for guaranteed luxury room rates & direct reservations
             </p>
@@ -119,7 +119,7 @@ const Register = () => {
                 <input
                   type="tel"
                   name="phone"
-                  placeholder="+1 (555) 234-5678"
+                  placeholder="+91 98765 43210"
                   className="form-control border-start-0"
                   value={formData.phone}
                   onChange={handleChange}

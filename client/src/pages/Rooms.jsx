@@ -91,21 +91,22 @@ const Rooms = () => {
         {/* Header */}
         <div className="text-center mb-5">
           <span className="text-uppercase fw-bold small text-muted" style={{ letterSpacing: '2px' }}>
-            Accommodations
+            Royal Heritage Accommodations
           </span>
-          <h1 className="display-5 fw-bold font-serif mt-1">Our Luxury Rooms & Suites</h1>
-          <p className="text-muted mx-auto" style={{ maxWidth: '650px' }}>
-            Each suite at HotelPro is an enclave of serenity, designed with handcrafted furniture, spa-grade ensuites, and breathtaking horizons.
+          <h1 className="display-5 fw-bold font-serif mt-1">Palaces, Havelis & Suites</h1>
+          <p className="text-muted mx-auto" style={{ maxWidth: '680px' }}>
+            Each suite at HotelPro is an enclave of royal serenity, designed with carved teakwood furniture, marble ensuites, and breathtaking lake and courtyard horizons.
           </p>
+          <div className="royal-divider"></div>
         </div>
 
-        {/* Date Filter Notification Banner if search had dates */}
+        {/* Date Filter Notification Banner */}
         {filters.checkIn && filters.checkOut && (
-          <div className="alert alert-info d-flex align-items-center justify-content-between mb-4 rounded-3 shadow-sm">
+          <div className="alert alert-info d-flex align-items-center justify-content-between mb-4 rounded-3 shadow-sm border">
             <div className="d-flex align-items-center gap-2">
               <i className="bi bi-calendar2-range fs-5 text-primary"></i>
               <span>
-                Filtering available accommodations for <strong>{filters.checkIn}</strong> to{' '}
+                Filtering available royal suites for <strong>{filters.checkIn}</strong> to{' '}
                 <strong>{filters.checkOut}</strong>
               </span>
             </div>
@@ -134,23 +135,23 @@ const Rooms = () => {
 
         {/* Rooms Grid */}
         {loading ? (
-          <LoadingSpinner text="Searching available accommodations..." fullPage />
+          <LoadingSpinner text="Searching available palace accommodations..." fullPage />
         ) : rooms.length === 0 ? (
           <div className="text-center py-5 bg-white rounded-4 shadow-sm p-5 border">
             <i className="bi bi-search fs-1 text-muted mb-3 d-block"></i>
             <h4 className="fw-bold font-serif mb-2">No Accommodations Found</h4>
             <p className="text-muted mb-4">
-              We couldn't find any rooms matching your exact filter preferences or dates.
+              We couldn't find any suites matching your exact filter preferences or dates.
             </p>
             <button onClick={handleReset} className="btn btn-navy px-4 py-2">
-              Reset Filters & Show All Rooms
+              Reset Filters & Show All Suites
             </button>
           </div>
         ) : (
           <div>
             <div className="d-flex justify-content-between align-items-center mb-4">
               <span className="text-muted small fw-semibold">
-                Showing <strong>{rooms.length}</strong> available suite{rooms.length > 1 ? 's' : ''}
+                Showing <strong>{rooms.length}</strong> available royal suite{rooms.length > 1 ? 's' : ''}
               </span>
             </div>
 

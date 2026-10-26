@@ -81,7 +81,7 @@ const AdminDashboard = () => {
       title: '',
       type: 'Deluxe',
       description: 'Experience utmost luxury and modern comfort.',
-      pricePerNight: '250',
+      pricePerNight: '7500',
       capacity: 2,
       bedType: '1 King Bed',
       roomSize: 45,
@@ -391,7 +391,7 @@ const AdminDashboard = () => {
                               Booking Revenue
                             </span>
                             <h3 className="fw-bold font-serif text-navy mt-2 mb-0">
-                              ${stats?.totalRevenue?.toLocaleString() || 0}
+                              ₹{Number(stats?.totalRevenue || 0).toLocaleString('en-IN')}
                             </h3>
                           </div>
                           <div className="badge bg-success p-3 rounded-circle">
@@ -515,7 +515,7 @@ const AdminDashboard = () => {
                                 <small className="d-block text-muted">{b.nights} night(s)</small>
                               </td>
                               <td>
-                                <span className="fw-bold font-serif text-navy">${b.totalPrice}</span>
+                                <span className="fw-bold font-serif text-navy">₹{Number(b.totalPrice || 0).toLocaleString('en-IN')}</span>
                               </td>
                               <td>
                                 <span
@@ -606,7 +606,7 @@ const AdminDashboard = () => {
                               <small className="text-muted d-block">{room.bedType}</small>
                             </td>
                             <td>
-                              <strong className="text-navy font-serif fs-6">${room.pricePerNight}</strong>
+                              <strong className="text-navy font-serif fs-6">₹{Number(room.pricePerNight || 0).toLocaleString('en-IN')}</strong>
                             </td>
                             <td>
                               <span
@@ -720,7 +720,7 @@ const AdminDashboard = () => {
                             </td>
                             <td>
                               <span className="fw-bold font-serif fs-6 text-navy">
-                                ${b.totalPrice}
+                                ₹{Number(b.totalPrice || 0).toLocaleString('en-IN')}
                               </span>
                             </td>
                             <td>
@@ -806,7 +806,7 @@ const AdminDashboard = () => {
                             </td>
                             <td>
                               <strong className="text-navy font-serif">
-                                ${u.totalSpent ? u.totalSpent.toLocaleString() : 0}
+                                ₹{Number(u.totalSpent || 0).toLocaleString('en-IN')}
                               </strong>
                             </td>
                             <td className="text-end">
@@ -897,7 +897,7 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="col-md-4">
-                      <label className="form-label small fw-semibold">Price Per Night ($) *</label>
+                      <label className="form-label small fw-semibold">Tariff Per Night (₹) *</label>
                       <input
                         type="number"
                         required

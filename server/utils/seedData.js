@@ -11,49 +11,49 @@ const { connectDB } = require('../config/db');
 
 const initialUsers = [
   {
-    name: 'Alexander Wright',
+    name: 'Rajeshwar Singh Shekhawat',
     email: 'admin@hotelpro.com',
     password: 'AdminPassword123!',
     role: 'admin',
-    phone: '+1 (555) 019-2834',
+    phone: '+91 98110 23456',
   },
   {
-    name: 'Sophia Montgomery',
+    name: 'Ananya Sharma',
     email: 'customer@hotelpro.com',
     password: 'CustomerPassword123!',
     role: 'customer',
-    phone: '+1 (555) 438-9120',
+    phone: '+91 98201 54321',
   },
   {
-    name: 'David Chen',
-    email: 'david.chen@example.com',
+    name: 'Arjun Patel',
+    email: 'arjun.patel@example.com',
     password: 'CustomerPassword123!',
     role: 'customer',
-    phone: '+1 (555) 782-3490',
+    phone: '+91 98790 65432',
   },
 ];
 
 const initialRooms = [
   {
     roomNumber: '101',
-    title: 'Deluxe Oceanfront Suite',
+    title: 'Maharaja Royal Heritage Suite',
     type: 'Deluxe',
-    description: 'Immerse yourself in coastal elegance. Features panoramic ocean views from a private balcony, a lavish marble bathroom with a deep soaking tub, and custom Italian linens.',
-    pricePerNight: 280,
+    description: 'Step into the grandeur of Rajasthan royalty. Features intricate jharokha bay windows overlooking lake waters, handcrafted teakwood furnishings, brass chandeliers, and an Italian marble bathroom with rose petal soaking bath.',
+    pricePerNight: 8500,
     capacity: 2,
-    bedType: '1 Plush King Bed',
-    roomSize: 55,
+    bedType: '1 Royal Teakwood King Bed',
+    roomSize: 58,
     rating: 4.9,
     featured: true,
     status: 'Available',
     amenities: [
-      'High-speed Wi-Fi',
-      'Private Ocean Balcony',
-      'Marble Soaking Tub',
-      'Nespresso Coffee Machine',
-      'Mini Bar & Wine Cooler',
-      'Smart 4K TV & Soundbar',
-      '24/7 Room Service',
+      'Traditional Aarti & Garland Welcome',
+      'Lake View Jharokha Balcony',
+      'Rose Petal Soaking Tub',
+      'Ayurvedic Herbal Bath Amenities',
+      'High-Speed Wi-Fi',
+      'Royal Masala Chai & Nespresso Bar',
+      '24/7 Khidmatgar (Butler) Service',
       'Air Conditioning',
     ],
     images: [
@@ -64,25 +64,25 @@ const initialRooms = [
   },
   {
     roomNumber: '201',
-    title: 'The Grand Presidential Penthouse',
+    title: 'The Kohinoor Presidential Palace Suite',
     type: 'Presidential',
-    description: 'The pinnacle of luxury hospitality. This sprawling penthouse suite features a private terrace with heated jacuzzi, private butler service, bespoke chandelier lighting, and a chef-ready dining salon.',
-    pricePerNight: 750,
+    description: 'The crown jewel of Indian luxury hospitality. Sprawling royal suite with private open-air terrace jacuzzi, hand-knotted Persian silk rugs, antique Mughal artwork, private dining salon, and dedicated luxury chauffeur.',
+    pricePerNight: 24000,
     capacity: 4,
-    bedType: '2 California King Beds',
-    roomSize: 135,
+    bedType: '2 Handcrafted King Four-Poster Beds',
+    roomSize: 145,
     rating: 5.0,
     featured: true,
     status: 'Available',
     amenities: [
       'Private Terrace & Heated Jacuzzi',
-      'Dedicated Butler Service',
-      'Private Dining Salon & Bar',
-      'High-speed Wi-Fi',
-      'Walk-in Dressing Room',
-      'Smart Home Automation',
-      'Bang & Olufsen Sound System',
-      'Complimentary Airport Chauffeur',
+      'Dedicated Royal Butler (Khidmatgar)',
+      'Royal Thali Private Dining Chamber',
+      'Morning Yoga & Meditation Session',
+      'Complimentary Airport Luxury Chauffeur',
+      'High-Speed Wi-Fi',
+      'Walk-in Royal Dressing Room',
+      'Smart Automation & Bang & Olufsen Sound',
     ],
     images: [
       'https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80',
@@ -92,23 +92,23 @@ const initialRooms = [
   },
   {
     roomNumber: '301',
-    title: 'Executive Skyline Suite',
+    title: 'Malabar Backwaters Executive Suite',
     type: 'Suite',
-    description: 'Designed for discerning travelers and executives. Features a separate work study with ergonomic seating, city skyline vistas, rainfall shower, and complimentary access to the Executive Club Lounge.',
-    pricePerNight: 390,
+    description: 'Inspired by the serene backwaters and fragrant spice estates of Kerala. Rosewood furnishings, open-air rainforest shower, private veranda overlooking lily ponds, and complimentary Ayurvedic tea bar.',
+    pricePerNight: 12500,
     capacity: 3,
-    bedType: '1 King Bed & 1 Daybed',
-    roomSize: 70,
+    bedType: '1 King Bed & 1 Daybed (Diwan)',
+    roomSize: 72,
     rating: 4.8,
     featured: true,
     status: 'Available',
     amenities: [
-      'Club Lounge Access',
-      'Dedicated Workstation & Ergonomic Chair',
-      'Rainfall Shower & Steam Sauna',
-      'High-speed Wi-Fi',
-      'Espresso & Tea Bar',
-      'In-Room Safe & Pressing Service',
+      'Botanical Lily Pond Veranda',
+      'Ayurvedic Herbal Steam & Rain Shower',
+      'Dedicated Workstation & High-Speed Wi-Fi',
+      'Club Lounge & Evening High Tea',
+      'South Indian Filter Coffee Bar',
+      'Organic Cotton Linen & Robes',
       'Air Conditioning',
     ],
     images: [
@@ -119,24 +119,24 @@ const initialRooms = [
   },
   {
     roomNumber: '102',
-    title: 'Classic Garden Double Room',
+    title: 'Mughal Courtyard Heritage Double',
     type: 'Double',
-    description: 'Charming and serene, this double room looks out onto our fragrant botanical courtyard. Equipped with two queen beds, soundproofing, and organic bath essentials.',
-    pricePerNight: 195,
+    description: 'A tranquil sanctuary opening directly into our fragrant jasmine and frangipani courtyard. Two plush queen beds, soundproofing, organic herbal bath products, and carved stone jaali lattice screens.',
+    pricePerNight: 5800,
     capacity: 4,
     bedType: '2 Queen Beds',
-    roomSize: 45,
+    roomSize: 48,
     rating: 4.7,
     featured: false,
     status: 'Available',
     amenities: [
-      'Courtyard Garden View',
+      'Fragrant Courtyard Garden View',
       'Two Plush Queen Beds',
-      'High-speed Wi-Fi',
-      'Soundproof Windows',
-      'Artisanal Bath Amenities',
-      'HD Smart TV',
-      'Tea & Coffee Maker',
+      'High-Speed Wi-Fi',
+      'Traditional Handloom Tapestries',
+      'Artisanal Brass Bath Amenities',
+      'Smart TV & Masala Chai Maker',
+      'Morning Yoga Access',
     ],
     images: [
       'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80',
@@ -145,23 +145,23 @@ const initialRooms = [
   },
   {
     roomNumber: '103',
-    title: 'Boutique Solo Traveler Sanctuary',
+    title: 'Vedic Solo Traveler Sanctuary',
     type: 'Single',
-    description: 'An artfully curated sanctuary tailored for the solo explorer or focused business professional. High-thread-count linens, ultra-fast fiber internet, and sleek contemporary decor.',
-    pricePerNight: 130,
+    description: 'An artfully curated sanctuary tailored for the mindful solo traveler or visiting corporate executive. High-thread-count organic cotton linens, copper water vessels, dedicated desk, and fiber internet.',
+    pricePerNight: 3200,
     capacity: 1,
     bedType: '1 Queen Bed',
-    roomSize: 32,
+    roomSize: 34,
     rating: 4.6,
     featured: false,
     status: 'Available',
     amenities: [
-      'High-speed Fiber Wi-Fi',
-      'Dedicated Laptop Desk',
+      'High-Speed Fiber Wi-Fi',
+      'Dedicated Work Desk',
+      'Ayurvedic Copper Carafe',
       'Rainfall Shower',
       'Smart TV with Streaming Apps',
-      'Air Conditioning',
-      'Electronic Safe',
+      'Air Conditioning & Digital Safe',
     ],
     images: [
       'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80',
@@ -170,23 +170,23 @@ const initialRooms = [
   },
   {
     roomNumber: '202',
-    title: 'Royal Heritage Deluxe Suite',
+    title: 'Jaipur Haveli Deluxe Suite',
     type: 'Deluxe',
-    description: 'Blending historic architecture with contemporary opulence. Features ornate crown molding, handcrafted walnut furnishings, and a luxurious double vanity bathroom.',
-    pricePerNight: 320,
+    description: 'A celebration of Pink City architectural mastery with hand-painted fresco ceilings, ornate stone arches, double marble vanity, and evening courtyard classical sitar performances.',
+    pricePerNight: 9200,
     capacity: 2,
     bedType: '1 King Bed',
-    roomSize: 62,
+    roomSize: 64,
     rating: 4.9,
     featured: true,
     status: 'Available',
     amenities: [
-      'Historic Courtyard Views',
+      'Heritage Baoli Courtyard Balcony',
       'Double Marble Vanity',
-      'Complimentary Champagne Welcome',
-      'High-speed Wi-Fi',
+      'Complimentary Kesar Badam Welcome Drink',
       'Deep Soaking Tub',
-      'Designer Bathrobes & Slippers',
+      'High-Speed Wi-Fi',
+      'Pure Silk Bathrobes & Slippers',
     ],
     images: [
       'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1200&q=80',
@@ -205,26 +205,24 @@ const seedData = async () => {
     await Room.deleteMany({});
     await User.deleteMany({});
 
-    console.log('[Seed] Seeding default users...');
-    // Use User.create so pre('save') bcrypt hashing is properly executed
+    console.log('[Seed] Seeding Indian luxury demo users...');
     const createdUsers = [];
     for (const u of initialUsers) {
       const user = await User.create(u);
       createdUsers.push(user);
     }
     console.log(`[Seed] Seeded ${createdUsers.length} users:`);
-    console.log(`   - Admin: admin@hotelpro.com (Password: AdminPassword123!)`);
-    console.log(`   - Customer: customer@hotelpro.com (Password: CustomerPassword123!)`);
+    console.log(`   - Admin: admin@hotelpro.com (Password: AdminPassword123!) [${createdUsers[0].name}]`);
+    console.log(`   - Customer: customer@hotelpro.com (Password: CustomerPassword123!) [${createdUsers[1].name}]`);
 
-    console.log('[Seed] Seeding rooms...');
+    console.log('[Seed] Seeding Indian heritage suites...');
     const createdRooms = await Room.insertMany(initialRooms);
-    console.log(`[Seed] Seeded ${createdRooms.length} luxury hotel rooms.`);
+    console.log(`[Seed] Seeded ${createdRooms.length} Indian royal suites.`);
 
-    console.log('[Seed] Seeding sample initial booking for demonstration...');
+    console.log('[Seed] Seeding sample booking for demonstration...');
     const customer = createdUsers.find((u) => u.role === 'customer');
     const demoRoom = createdRooms[0];
 
-    // Create a confirmed booking 5 days in the future
     const checkInDate = new Date();
     checkInDate.setDate(checkInDate.getDate() + 5);
     checkInDate.setHours(0, 0, 0, 0);
@@ -246,11 +244,11 @@ const seedData = async () => {
       totalPrice,
       bookingStatus: 'Confirmed',
       paymentStatus: 'Paid',
-      specialRequests: 'High floor preferred. Anniversary celebration.',
+      specialRequests: 'Traditional garland welcome requested. Annaprashan celebration.',
     });
-    console.log(`[Seed] Seeded sample booking for ${customer.name} in Room ${demoRoom.roomNumber}.`);
+    console.log(`[Seed] Seeded booking for ${customer.name} in Room ${demoRoom.roomNumber} (Total: ₹${totalPrice}).`);
 
-    console.log('[Seed] Database successfully seeded with HotelPro demo data!');
+    console.log('[Seed] Database successfully re-seeded with HotelPro Indian Heritage data!');
     process.exit(0);
   } catch (error) {
     console.error(`[Seed Error] Failed to seed database: ${error.message}`);
@@ -258,7 +256,6 @@ const seedData = async () => {
   }
 };
 
-// If run directly via `node utils/seedData.js`
 if (require.main === module) {
   seedData();
 }

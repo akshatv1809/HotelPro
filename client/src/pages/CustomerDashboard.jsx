@@ -24,9 +24,6 @@ const CustomerDashboard = () => {
     confirmPassword: '',
   });
 
-  // Selected Booking for Modal / Details View
-  const [selectedBooking, setSelectedBooking] = useState(null);
-
   const fetchBookings = async () => {
     try {
       setLoading(true);
@@ -60,15 +57,11 @@ const CustomerDashboard = () => {
       if (res.success) {
         setFeedback({
           variant: 'success',
-          message: 'Your reservation was successfully cancelled.',
+          message: 'Your reservation was successfully cancelled and the suite released.',
         });
-        // Update local state
         setBookings((prev) =>
           prev.map((b) => (b._id === bookingId ? res.booking : b))
         );
-        if (selectedBooking && selectedBooking._id === bookingId) {
-          setSelectedBooking(res.booking);
-        }
       }
     } catch (err) {
       console.error('Cancellation failed:', err);
@@ -144,7 +137,7 @@ const CustomerDashboard = () => {
 
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';
-    return new Date(dateStr).toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString('en-IN', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -164,16 +157,16 @@ const CustomerDashboard = () => {
         {/* Dashboard Header */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
           <div>
-            <span className="badge badge-gold mb-1">Customer Portal</span>
+            <span className="badge badge-gold mb-1">🙏 Namaste &bull; Guest Portal</span>
             <h1 className="display-6 fw-bold font-serif mb-0">
-              Welcome back, {user?.name}
+              Welcome, {user?.name}
             </h1>
             <p className="text-muted small mb-0 mt-1">
-              Manage your HotelPro suite reservations and personal guest profile.
+              Manage your HotelPro royal reservations and guest profile.
             </p>
           </div>
           <Link to="/rooms" className="btn btn-navy shadow-sm">
-            <i className="bi bi-plus-lg me-1"></i> Book New Suite
+            <i className="bi bi-plus-lg me-1"></i> Book Another Suite
           </Link>
         </div>
 
@@ -187,7 +180,7 @@ const CustomerDashboard = () => {
         )}
 
         {/* Navigation Tabs */}
-        <div className="card border-0 shadow-sm rounded-4 overflow-hidden mb-4 bg-white">
+        <div className="card border-0 shadow-sm rounded-4 overflow-hidden mb-4 bg-white border">
           <div className="card-header bg-white border-bottom p-0">
             <ul className="nav nav-tabs border-0 px-3 pt-2">
               <li className="nav-item">
@@ -251,11 +244,11 @@ const CustomerDashboard = () => {
                     <h5 className="fw-bold font-serif mb-2">No Reservations Found</h5>
                     <p className="text-muted small mb-3">
                       {statusFilter === 'All'
-                        ? "You haven't booked any luxury suites yet."
+                        ? "You haven't reserved any royal suites yet."
                         : `No ${statusFilter.toLowerCase()} reservations to display.`}
                     </p>
                     <Link to="/rooms" className="btn btn-gold btn-sm px-3 py-2">
-                      Browse Accommodations
+                      Explore Royal Suites
                     </Link>
                   </div>
                 ) : (
@@ -263,10 +256,10 @@ const CustomerDashboard = () => {
                     <table className="table table-hover hotel-table align-middle">
                       <thead>
                         <tr>
-                          <th>Suite / Room</th>
+                          <th>Suite / Palace</th>
                           <th>Stay Dates</th>
                           <th>Guests</th>
-                          <th>Total Rate</th>
+                          <th>Total Tariff</th>
                           <th>Status</th>
                           <th>Payment</th>
                           <th className="text-end">Actions</th>
@@ -289,9 +282,9 @@ const CustomerDashboard = () => {
                                     style={{ width: '60px', height: '48px' }}
                                   />
                                   <div>
-                                    <div className="fw-bold text-dark">{room.title || 'Luxury Room'}</div>
+                                    <div className="fw-bold text-dark">{room.title || 'Royal Suite'}</div>
                                     <small className="text-muted">
-                                      Room #{room.roomNumber} &bull; {room.type}
+                                      Suite #{room.roomNumber} &bull; {room.type}
                                     </small>
                                   </div>
                                 </div>
@@ -305,7 +298,7 @@ const CustomerDashboard = () => {
                               <td className="small">{b.guests} Guest(s)</td>
                               <td>
                                 <span className="fw-bold text-navy font-serif fs-6">
-                                  ${b.totalPrice}
+                                  ₹{Number(b.totalPrice || 0).toLocaleString('en-IN')}
                                 </span>
                               </td>
                               <td>
@@ -339,7 +332,7 @@ const CustomerDashboard = () => {
                                   <Link
                                     to={`/booking/confirmation/${b._id}`}
                                     className="btn btn-sm btn-outline-primary"
-                                    title="View Receipt"
+                                    title="View Voucher"
                                   >
                                     <i className="bi bi-receipt"></i>
                                   </Link>
@@ -370,7 +363,7 @@ const CustomerDashboard = () => {
               <div className="row justify-content-center">
                 <div className="col-lg-8">
                   <form onSubmit={handleProfileSubmit}>
-                    <h5 className="fw-bold font-serif mb-3">Personal Guest Details</h5>
+                    <h5 className="fw-bold font-serif mb-3">Guest Profile Details</h5>
 
                     <div className="row g-3 mb-4">
                       <div className="col-md-6">
@@ -395,10 +388,10 @@ const CustomerDashboard = () => {
                       </div>
 
                       <div className="col-md-6">
-                        <label className="form-label small fw-semibold text-muted">Contact Phone Number</label>
+                        <label className="form-label small fw-semibold text-muted">Mobile Number (Indian)</label>
                         <input
                           type="tel"
-                          placeholder="+1 (555) 000-0000"
+                          placeholder="+91 98765 43210"
                           className="form-control"
                           value={profileForm.phone}
                           onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
@@ -406,21 +399,21 @@ const CustomerDashboard = () => {
                       </div>
 
                       <div className="col-md-6">
-                        <label className="form-label small fw-semibold text-muted">Account Role</label>
+                        <label className="form-label small fw-semibold text-muted">Membership Tier</label>
                         <input
                           type="text"
                           disabled
                           className="form-control bg-light text-capitalize"
-                          value={user?.role || 'Customer'}
+                          value={user?.role === 'admin' ? 'Palace Administrator' : 'Royal Circle Member'}
                         />
                       </div>
                     </div>
 
                     <hr className="my-4" />
 
-                    <h5 className="fw-bold font-serif mb-3">Change Security Password</h5>
+                    <h5 className="fw-bold font-serif mb-3">Update Security Password</h5>
                     <p className="text-muted small mb-3">
-                      Leave these fields blank if you do not wish to update your password.
+                      Leave blank if you do not wish to update your password.
                     </p>
 
                     <div className="row g-3 mb-4">
@@ -470,7 +463,7 @@ const CustomerDashboard = () => {
                         disabled={actionLoading}
                         className="btn btn-navy px-4 py-2 fw-semibold"
                       >
-                        {actionLoading ? 'Saving Changes...' : 'Save Profile Changes'}
+                        {actionLoading ? 'Saving...' : 'Save Profile Changes'}
                       </button>
                     </div>
                   </form>
