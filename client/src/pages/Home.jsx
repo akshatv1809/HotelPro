@@ -16,6 +16,7 @@ const Home = () => {
   const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
   const [searchForm, setSearchForm] = useState({
+    destination: 'All',
     checkIn: todayStr,
     checkOut: tomorrowStr,
     guests: '2',
@@ -47,6 +48,9 @@ const Home = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const query = new URLSearchParams();
+    if (searchForm.destination && searchForm.destination !== 'All') {
+      query.append('search', searchForm.destination);
+    }
     if (searchForm.checkIn) query.append('checkIn', searchForm.checkIn);
     if (searchForm.checkOut) query.append('checkOut', searchForm.checkOut);
     if (searchForm.guests) query.append('guests', searchForm.guests);
@@ -57,67 +61,95 @@ const Home = () => {
 
   return (
     <div>
-      {/* Royal Indian Hero Section */}
-      <section className="hero-section text-center text-white d-flex align-items-center">
-        <div className="container py-5">
-          <span className="hero-subtitle mb-2 d-inline-block">
-            🙏 नमस्ते &bull; ATITHI DEVO BHAVA &bull; ROYAL INDIAN HOSPITALITY
-          </span>
-          <h1 className="display-3 fw-bold font-serif mb-3 text-white">
-            Experience Timeless Regal Luxury in India
+      {/* 1. Hero Section */}
+      <section className="hero-indian-heritage text-center">
+        <div className="container py-4">
+          <div className="hero-tag">
+            अतिथि देवो भव &bull; Timeless Indian Hospitality
+          </div>
+          <h1 className="hero-title">
+            A Stay Rooted in India.
           </h1>
-          <p className="lead text-light opacity-90 mx-auto mb-4" style={{ maxWidth: '760px' }}>
-            Immerse yourself in heritage palaces, serene backwaters, authentic royal thali dining, and devoted Khidmatgar butler service crafted for unforgettable memories.
+          <p className="hero-description">
+            Discover extraordinary stays, timeless hospitality, and the art of Indian living across iconic palace courtyards, backwater retreats, and artisanal boutique sanctuaries.
           </p>
-          <div className="d-flex justify-content-center gap-3">
-            <Link to="/rooms" className="btn btn-gold btn-lg px-4 py-3 shadow">
-              <i className="bi bi-compass me-2"></i> Explore Royal Suites
+          <div className="d-flex flex-wrap justify-content-center gap-3">
+            <Link to="/rooms" className="btn btn-gold btn-lg px-4 py-3 shadow-sm">
+              <i className="bi bi-compass me-1"></i>
+              <span>Explore Stays</span>
             </Link>
             <Link to="/about" className="btn btn-outline-light btn-lg px-4 py-3">
-              Our Royal Heritage
+              <span>Discover Our Story</span>
+              <i className="bi bi-arrow-right ms-1"></i>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Floating Availability Search Bar */}
+      {/* 2. Integrated Booking Search Panel */}
       <div className="container">
-        <div className="search-bar-box">
+        <div className="booking-search-panel">
           <form onSubmit={handleSearchSubmit} className="row g-3 align-items-end">
+            {/* Destination */}
             <div className="col-lg-3 col-md-6">
-              <label className="form-label small fw-bold text-muted d-flex align-items-center gap-1">
-                <i className="bi bi-calendar-event text-warning"></i> Check-In Date
+              <label className="form-label" htmlFor="hero-destination">
+                <i className="bi bi-geo-alt text-gold me-1"></i> Destination
+              </label>
+              <select
+                id="hero-destination"
+                className="form-select"
+                value={searchForm.destination}
+                onChange={(e) => setSearchForm({ ...searchForm, destination: e.target.value })}
+              >
+                <option value="All">All Indian Sanctuaries</option>
+                <option value="Udaipur">Udaipur, Rajasthan</option>
+                <option value="Jaipur">Jaipur, Rajasthan</option>
+                <option value="Jodhpur">Jodhpur, Rajasthan</option>
+                <option value="Kerala">Kumarakom, Kerala</option>
+                <option value="Varanasi">Varanasi, Uttar Pradesh</option>
+              </select>
+            </div>
+
+            {/* Check-In */}
+            <div className="col-lg-2 col-md-6">
+              <label className="form-label" htmlFor="hero-checkIn">
+                <i className="bi bi-calendar-event text-gold me-1"></i> Check-in
               </label>
               <input
+                id="hero-checkIn"
                 type="date"
                 min={todayStr}
                 required
-                className="form-control form-control-lg fs-6"
+                className="form-control"
                 value={searchForm.checkIn}
                 onChange={(e) => setSearchForm({ ...searchForm, checkIn: e.target.value })}
               />
             </div>
 
-            <div className="col-lg-3 col-md-6">
-              <label className="form-label small fw-bold text-muted d-flex align-items-center gap-1">
-                <i className="bi bi-calendar-check text-warning"></i> Check-Out Date
+            {/* Check-Out */}
+            <div className="col-lg-2 col-md-6">
+              <label className="form-label" htmlFor="hero-checkOut">
+                <i className="bi bi-calendar-check text-gold me-1"></i> Check-out
               </label>
               <input
+                id="hero-checkOut"
                 type="date"
                 min={searchForm.checkIn || todayStr}
                 required
-                className="form-control form-control-lg fs-6"
+                className="form-control"
                 value={searchForm.checkOut}
                 onChange={(e) => setSearchForm({ ...searchForm, checkOut: e.target.value })}
               />
             </div>
 
-            <div className="col-lg-2 col-md-4">
-              <label className="form-label small fw-bold text-muted d-flex align-items-center gap-1">
-                <i className="bi bi-people text-warning"></i> Guests
+            {/* Guests & Category */}
+            <div className="col-lg-2 col-md-3 col-6">
+              <label className="form-label" htmlFor="hero-guests">
+                <i className="bi bi-people text-gold me-1"></i> Guests
               </label>
               <select
-                className="form-select form-select-lg fs-6"
+                id="hero-guests"
+                className="form-select"
                 value={searchForm.guests}
                 onChange={(e) => setSearchForm({ ...searchForm, guests: e.target.value })}
               >
@@ -128,130 +160,47 @@ const Home = () => {
               </select>
             </div>
 
-            <div className="col-lg-2 col-md-4">
-              <label className="form-label small fw-bold text-muted d-flex align-items-center gap-1">
-                <i className="bi bi-building text-warning"></i> Suite Category
-              </label>
-              <select
-                className="form-select form-select-lg fs-6"
-                value={searchForm.type}
-                onChange={(e) => setSearchForm({ ...searchForm, type: e.target.value })}
-              >
-                <option value="All">All Suites</option>
-                <option value="Single">Vedic Single</option>
-                <option value="Double">Courtyard Double</option>
-                <option value="Deluxe">Royal Deluxe</option>
-                <option value="Suite">Backwaters Suite</option>
-                <option value="Presidential">Kohinoor Penthouse</option>
-              </select>
-            </div>
-
-            <div className="col-lg-2 col-md-4">
+            <div className="col-lg-3 col-md-3 col-6">
               <button
                 type="submit"
-                className="btn btn-navy btn-lg w-100 fs-6 fw-bold py-3 d-flex align-items-center justify-content-center gap-2"
+                className="btn btn-indigo w-100 py-2 fs-6 fw-semibold d-flex align-items-center justify-content-center gap-2"
+                style={{ height: '42px' }}
               >
                 <i className="bi bi-search"></i>
-                <span>Find Suites</span>
+                <span>Search Availability</span>
               </button>
             </div>
           </form>
         </div>
       </div>
 
-      {/* Royal Heritage Pillars */}
+      {/* 3. Featured Stays (Editorial Cards) */}
       <section className="py-5 mt-4">
-        <div className="container">
-          <div className="text-center mb-5">
-            <span className="text-uppercase fw-bold small text-muted" style={{ letterSpacing: '2px' }}>
-              The HotelPro Standard
-            </span>
-            <h2 className="display-6 fw-bold font-serif mt-1">Regal Traditions & Modern Comfort</h2>
-            <div className="royal-divider"></div>
-          </div>
-
-          <div className="row g-4">
-            <div className="col-lg-3 col-md-6">
-              <div className="card h-100 border-0 p-4 text-center rounded-4 shadow-sm bg-white">
-                <div
-                  className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                  style={{ width: '64px', height: '64px', background: 'var(--hotel-gold-light)', color: 'var(--hotel-gold-dark)' }}
-                >
-                  <i className="bi bi-gem fs-3"></i>
-                </div>
-                <h5 className="fw-bold mb-2 font-serif">Rajputana Havelis</h5>
-                <p className="text-muted small mb-0">
-                  Carved stone jaalis, hand-painted fresco ceilings, and jharokha balconies overlooking ancient waters.
-                </p>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6">
-              <div className="card h-100 border-0 p-4 text-center rounded-4 shadow-sm bg-white">
-                <div
-                  className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                  style={{ width: '64px', height: '64px', background: 'var(--hotel-gold-light)', color: 'var(--hotel-gold-dark)' }}
-                >
-                  <i className="bi bi-cup-hot fs-3"></i>
-                </div>
-                <h5 className="fw-bold mb-2 font-serif">Royal Thali & Dining</h5>
-                <p className="text-muted small mb-0">
-                  Secret recipes from royal kitchens, Satvik master culinary creations, and evening courtyard masala chai.
-                </p>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6">
-              <div className="card h-100 border-0 p-4 text-center rounded-4 shadow-sm bg-white">
-                <div
-                  className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                  style={{ width: '64px', height: '64px', background: 'var(--hotel-gold-light)', color: 'var(--hotel-gold-dark)' }}
-                >
-                  <i className="bi bi-flower1 fs-3"></i>
-                </div>
-                <h5 className="fw-bold mb-2 font-serif">Ayurvedic Wellness</h5>
-                <p className="text-muted small mb-0">
-                  Authentic Kerala Panchakarma therapies, morning yoga overlooking sunrise, and herbal rejuvenation baths.
-                </p>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6">
-              <div className="card h-100 border-0 p-4 text-center rounded-4 shadow-sm bg-white">
-                <div
-                  className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                  style={{ width: '64px', height: '64px', background: 'var(--hotel-gold-light)', color: 'var(--hotel-gold-dark)' }}
-                >
-                  <i className="bi bi-shield-check fs-3"></i>
-                </div>
-                <h5 className="fw-bold mb-2 font-serif">24/7 Khidmatgar</h5>
-                <p className="text-muted small mb-0">
-                  Traditional Aarti and garland welcome, devoted personal butlers, and bespoke royal cultural excursions.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Suites Showcase */}
-      <section className="py-5 bg-white border-top border-bottom">
-        <div className="container">
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5">
+        <div className="container py-2">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4">
             <div>
-              <span className="text-uppercase fw-bold small text-muted" style={{ letterSpacing: '2px' }}>
-                Handcrafted Accommodations
-              </span>
-              <h2 className="display-6 fw-bold font-serif mt-1 mb-0">Signature Heritage Suites</h2>
+              <span className="hero-tag mb-1 d-inline-block">Curated Sanctuaries</span>
+              <h2 className="display-6 fw-bold font-serif text-indigo mb-1">
+                Featured Accommodations
+              </h2>
+              <p className="text-muted small mb-0">
+                Spacious suites inspired by historic havelis, royal residences, and tranquil backwaters.
+              </p>
             </div>
-            <Link to="/rooms" className="btn btn-outline-gold mt-3 mt-md-0 d-inline-flex align-items-center gap-2">
-              <span>View All Royal Suites</span>
-              <i className="bi bi-arrow-right"></i>
+            <Link to="/rooms" className="btn btn-outline-indigo mt-3 mt-md-0 btn-sm">
+              <span>View All Stays</span>
+              <i className="bi bi-arrow-right ms-1"></i>
             </Link>
           </div>
 
+          <div className="jali-divider mb-4">
+            <span className="jali-symbol">✦</span>
+          </div>
+
           {loading ? (
-            <LoadingSpinner text="Presenting royal accommodations..." />
+            <div className="py-5">
+              <LoadingSpinner text="Presenting curated Indian sanctuaries..." />
+            </div>
           ) : (
             <div className="row g-4">
               {featuredRooms.map((room) => (
@@ -264,71 +213,130 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Visual Experience Showcase */}
-      <section className="py-5">
-        <div className="container py-4">
-          <div className="row align-items-center g-5">
-            <div className="col-lg-6">
-              <span className="text-uppercase fw-bold small text-muted" style={{ letterSpacing: '2px' }}>
-                The Udaipur Sanctuary
-              </span>
-              <h2 className="display-5 fw-bold font-serif mt-2 mb-4">
-                A Royal Palace on the Shimmering Waters of Lake Pichola
-              </h2>
-              <p className="text-muted mb-4 lead">
-                Surrounded by the majestic Aravalli hills, HotelPro captures the grandeur of Mewar kings with modern eco-conscious luxury.
-              </p>
-              <div className="d-flex flex-column gap-3 mb-4">
-                <div className="d-flex align-items-start gap-3">
-                  <div className="badge bg-warning text-dark rounded-circle p-2 mt-1">
-                    <i className="bi bi-check2"></i>
-                  </div>
-                  <div>
-                    <h6 className="fw-bold mb-1">Traditional Aarti & Garland Welcome</h6>
-                    <p className="text-muted small mb-0">With refreshing rose sherbet and fresh marigold malas upon arrival.</p>
-                  </div>
+      {/* 4. Indian Hospitality Experiences (Visual Sections) */}
+      <section id="experiences" className="py-5 bg-white border-top border-bottom">
+        <div className="container py-3">
+          <div className="text-center mb-5">
+            <span className="hero-tag mb-1 d-inline-block">The Art of Indian Living</span>
+            <h2 className="display-6 fw-bold font-serif text-indigo">
+              Cultural Experiences & Inspirations
+            </h2>
+            <div className="jali-divider">
+              <span className="jali-symbol">✦</span>
+            </div>
+            <p className="text-muted mx-auto small" style={{ maxWidth: '640px' }}>
+              <em>Editorial discovery:</em> Explore the heritage traditions and regional craftsmanship that inspire HotelPro stays across India.
+            </p>
+          </div>
+
+          <div className="row g-4">
+            {/* Experience 1: Royal Rajasthani Architecture */}
+            <div className="col-lg-3 col-md-6">
+              <div className="card ornamental-card h-100 p-0 border-0 overflow-hidden">
+                <div style={{ height: '200px', overflow: 'hidden' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80"
+                    alt="Royal Rajasthani architecture"
+                    className="w-100 h-100 object-fit-cover"
+                    loading="lazy"
+                  />
                 </div>
-                <div className="d-flex align-items-start gap-3">
-                  <div className="badge bg-warning text-dark rounded-circle p-2 mt-1">
-                    <i className="bi bi-check2"></i>
-                  </div>
-                  <div>
-                    <h6 className="fw-bold mb-1">Complimentary Airport Luxury Chauffeur</h6>
-                    <p className="text-muted small mb-0">Private transfer service from Maharana Pratap Airport (UDR).</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-start gap-3">
-                  <div className="badge bg-warning text-dark rounded-circle p-2 mt-1">
-                    <i className="bi bi-check2"></i>
-                  </div>
-                  <div>
-                    <h6 className="fw-bold mb-1">Authentic Rajasthani & Pan-Indian Dining</h6>
-                    <p className="text-muted small mb-0">Curated multi-course Royal Thalis, Dal Baati Churma, and Satvik delicacies.</p>
+                <div className="p-4 d-flex flex-column flex-grow-1">
+                  <span className="text-gold small fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>
+                    Rajasthan
+                  </span>
+                  <h5 className="font-serif fw-bold text-indigo my-2">
+                    Royal Rajasthani Architecture
+                  </h5>
+                  <p className="small text-muted mb-3 flex-grow-1">
+                    Stone jaali carvings that temper desert light, jharokha balconies overlooking ancient waters, and hand-painted fresco ceilings.
+                  </p>
+                  <div className="pt-2 border-top small text-muted">
+                    <span className="text-terracotta fw-semibold">Design Detail:</span> Mewar archways & marble courtyards
                   </div>
                 </div>
               </div>
-              <Link to="/about" className="btn btn-navy px-4 py-2">
-                Discover Our Heritage
-              </Link>
             </div>
-            <div className="col-lg-6">
-              <div className="position-relative">
-                <img
-                  src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80"
-                  alt="Udaipur Palace resort"
-                  className="rounded-4 shadow-lg w-100 object-fit-cover"
-                  style={{ height: '440px' }}
-                />
-                <div
-                  className="position-absolute bottom-0 start-0 m-4 p-3 bg-white rounded-3 shadow-lg d-flex align-items-center gap-3 border"
-                  style={{ maxWidth: '300px' }}
-                >
-                  <div className="fs-1 text-warning">
-                    <i className="bi bi-award-fill"></i>
+
+            {/* Experience 2: Kerala Backwaters */}
+            <div className="col-lg-3 col-md-6">
+              <div className="card ornamental-card h-100 p-0 border-0 overflow-hidden">
+                <div style={{ height: '200px', overflow: 'hidden' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80"
+                    alt="Kerala backwaters and serene waterways"
+                    className="w-100 h-100 object-fit-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-4 d-flex flex-column flex-grow-1">
+                  <span className="text-gold small fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>
+                    Kerala
+                  </span>
+                  <h5 className="font-serif fw-bold text-indigo my-2">
+                    Backwaters & Tranquil Retreats
+                  </h5>
+                  <p className="small text-muted mb-3 flex-grow-1">
+                    Verdant coconut palms, tranquil lagoons, rosewood verandas, and gentle Ayurvedic rituals designed to restore inner equilibrium.
+                  </p>
+                  <div className="pt-2 border-top small text-muted">
+                    <span className="text-terracotta fw-semibold">Design Detail:</span> Malabar teak & open lotus courtyards
                   </div>
-                  <div>
-                    <div className="fw-bold text-navy">Five-Star Royal Excellence</div>
-                    <small className="text-muted">Ranked #1 Indian Luxury Heritage Resort 2026</small>
+                </div>
+              </div>
+            </div>
+
+            {/* Experience 3: Contemporary Boutique Stays */}
+            <div className="col-lg-3 col-md-6">
+              <div className="card ornamental-card h-100 p-0 border-0 overflow-hidden">
+                <div style={{ height: '200px', overflow: 'hidden' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80"
+                    alt="Contemporary boutique luxury interior"
+                    className="w-100 h-100 object-fit-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-4 d-flex flex-column flex-grow-1">
+                  <span className="text-gold small fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>
+                    Modern India
+                  </span>
+                  <h5 className="font-serif fw-bold text-indigo my-2">
+                    Contemporary Boutique Stays
+                  </h5>
+                  <p className="small text-muted mb-3 flex-grow-1">
+                    Where traditional brass smithing and hand-knotted textiles meet quiet minimalism, acoustic serenity, and modern eco-luxury.
+                  </p>
+                  <div className="pt-2 border-top small text-muted">
+                    <span className="text-terracotta fw-semibold">Design Detail:</span> Artisanal linens & smart comfort
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Experience 4: Indian Culinary & Cultural Living */}
+            <div className="col-lg-3 col-md-6">
+              <div className="card ornamental-card h-100 p-0 border-0 overflow-hidden">
+                <div style={{ height: '200px', overflow: 'hidden' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?auto=format&fit=crop&w=800&q=80"
+                    alt="Indian culinary and royal dining experience"
+                    className="w-100 h-100 object-fit-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-4 d-flex flex-column flex-grow-1">
+                  <span className="text-gold small fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>
+                    Culinary Art
+                  </span>
+                  <h5 className="font-serif fw-bold text-indigo my-2">
+                    Culinary & Living Traditions
+                  </h5>
+                  <p className="small text-muted mb-3 flex-grow-1">
+                    Multi-course Royal Thalis, organic farm-to-table harvests, courtyard masala chai rituals, and fragrant marigold welcomes.
+                  </p>
+                  <div className="pt-2 border-top small text-muted">
+                    <span className="text-terracotta fw-semibold">Design Detail:</span> Kansa bronze thalis & slow cooking
                   </div>
                 </div>
               </div>
@@ -337,73 +345,173 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Guest Reviews (Indian Travelers) */}
-      <section className="py-5 bg-light border-top">
-        <div className="container">
+      {/* 5. Trust and Service (Truthful, functional information) */}
+      <section className="py-5">
+        <div className="container py-3">
           <div className="text-center mb-5">
-            <span className="text-uppercase fw-bold small text-muted" style={{ letterSpacing: '2px' }}>
-              Guest Experiences
-            </span>
-            <h2 className="display-6 fw-bold font-serif mt-1">Cherished by Guests Across India</h2>
-            <div className="royal-divider"></div>
+            <span className="hero-tag mb-1 d-inline-block">The HotelPro Promise</span>
+            <h2 className="display-6 fw-bold font-serif text-indigo">
+              Thoughtful, Dependable Hospitality
+            </h2>
+            <div className="jali-divider">
+              <span className="jali-symbol">✦</span>
+            </div>
+          </div>
+
+          <div className="row g-4">
+            <div className="col-md-3 col-sm-6">
+              <div className="p-4 bg-white rounded-3 ornamental-border h-100 text-center shadow-sm">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                  style={{ width: '56px', height: '56px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+                >
+                  <i className="bi bi-shield-check fs-3"></i>
+                </div>
+                <h6 className="fw-bold text-indigo mb-2 font-serif">Transparent Pricing</h6>
+                <p className="text-muted small mb-0">
+                  Direct server rates with no hidden processing fees. Clear tax breakdowns before reservation confirmation.
+                </p>
+              </div>
+            </div>
+
+            <div className="col-md-3 col-sm-6">
+              <div className="p-4 bg-white rounded-3 ornamental-border h-100 text-center shadow-sm">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                  style={{ width: '56px', height: '56px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+                >
+                  <i className="bi bi-key fs-3"></i>
+                </div>
+                <h6 className="fw-bold text-indigo mb-2 font-serif">Secure Authentication</h6>
+                <p className="text-muted small mb-0">
+                  Protected guest profiles with JWT token authorization, bcrypt password protection, and safe booking storage.
+                </p>
+              </div>
+            </div>
+
+            <div className="col-md-3 col-sm-6">
+              <div className="p-4 bg-white rounded-3 ornamental-border h-100 text-center shadow-sm">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                  style={{ width: '56px', height: '56px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+                >
+                  <i className="bi bi-calendar2-check fs-3"></i>
+                </div>
+                <h6 className="fw-bold text-indigo mb-2 font-serif">Reservation Management</h6>
+                <p className="text-muted small mb-0">
+                  Check upcoming stays, review booking references, and cancel reservations directly from your personal guest portal.
+                </p>
+              </div>
+            </div>
+
+            <div className="col-md-3 col-sm-6">
+              <div className="p-4 bg-white rounded-3 ornamental-border h-100 text-center shadow-sm">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                  style={{ width: '56px', height: '56px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+                >
+                  <i className="bi bi-headset fs-3"></i>
+                </div>
+                <h6 className="fw-bold text-indigo mb-2 font-serif">24/7 Concierge Support</h6>
+                <p className="text-muted small mb-0">
+                  Round-the-clock front desk and guest experience team ready to assist with arrivals, itinerary questions, and requests.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Guest Reflections (Indian Hospitality Testimonials) */}
+      <section className="py-5 bg-white border-top">
+        <div className="container py-2">
+          <div className="text-center mb-5">
+            <span className="hero-tag mb-1 d-inline-block">Guest Reflections</span>
+            <h2 className="display-6 fw-bold font-serif text-indigo">
+              Cherished Moments from Our Guests
+            </h2>
+            <div className="jali-divider">
+              <span className="jali-symbol">✦</span>
+            </div>
           </div>
 
           <div className="row g-4">
             <div className="col-md-4">
-              <div className="card h-100 border-0 rounded-4 p-4 shadow-sm bg-white">
-                <div className="d-flex text-warning mb-3">
-                  <i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i>
+              <div className="card h-100 ornamental-border rounded-3 p-4 shadow-sm bg-white">
+                <div className="d-flex text-gold mb-3 small">
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill"></i>
                 </div>
-                <p className="text-muted fst-italic mb-4">
-                  "Our family stay at the Maharaja Royal Heritage Suite was breathtaking. The traditional aarti welcome, the lake views from the jharokha, and the Royal Thali dinner made our 25th anniversary truly royal."
+                <p className="small text-charcoal-muted fst-italic mb-4" style={{ lineHeight: '1.7' }}>
+                  "The calm courtyards and the traditional aarti welcome made our stay in Udaipur feel like entering an ancient royal home. Every detail, from the rose sherbet to the jharokha breakfast, was impeccable."
                 </p>
-                <div className="d-flex align-items-center gap-3 mt-auto">
-                  <div className="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '42px', height: '42px', background: 'var(--hotel-navy)' }}>
+                <div className="d-flex align-items-center gap-3 mt-auto pt-3 border-top">
+                  <div
+                    className="rounded-circle d-flex align-items-center justify-content-center fw-bold small"
+                    style={{ width: '38px', height: '38px', background: 'var(--color-indigo)', color: '#FFFFFF' }}
+                  >
                     RM
                   </div>
                   <div>
-                    <h6 className="mb-0 fw-bold">Rohan & Priya Mehta</h6>
-                    <small className="text-muted">Mumbai, Maharashtra</small>
+                    <h6 className="mb-0 fw-semibold text-indigo small">Rohan & Priya Mehta</h6>
+                    <small className="text-muted" style={{ fontSize: '0.75rem' }}>Mumbai, Maharashtra</small>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="col-md-4">
-              <div className="card h-100 border-0 rounded-4 p-4 shadow-sm bg-white">
-                <div className="d-flex text-warning mb-3">
-                  <i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i>
+              <div className="card h-100 ornamental-border rounded-3 p-4 shadow-sm bg-white">
+                <div className="d-flex text-gold mb-3 small">
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill"></i>
                 </div>
-                <p className="text-muted fst-italic mb-4">
-                  "The Kohinoor Presidential Suite redefines luxury. Having a private heated jacuzzi on the open terrace overlooking Lake Pichola with dedicated Khidmatgar service is unmatched in India."
+                <p className="small text-charcoal-muted fst-italic mb-4" style={{ lineHeight: '1.7' }}>
+                  "HotelPro combines the grandeur of Indian palace architecture with the convenience of instant reservations. Our family reunion in Jaipur will be remembered for years."
                 </p>
-                <div className="d-flex align-items-center gap-3 mt-auto">
-                  <div className="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '42px', height: '42px', background: 'var(--hotel-navy)' }}>
+                <div className="d-flex align-items-center gap-3 mt-auto pt-3 border-top">
+                  <div
+                    className="rounded-circle d-flex align-items-center justify-content-center fw-bold small"
+                    style={{ width: '38px', height: '38px', background: 'var(--color-maroon)', color: '#FFFFFF' }}
+                  >
                     VR
                   </div>
                   <div>
-                    <h6 className="mb-0 fw-bold">Col. Vikramaditya Rathore</h6>
-                    <small className="text-muted">Jaipur, Rajasthan</small>
+                    <h6 className="mb-0 fw-semibold text-indigo small">Col. Vikramaditya Rathore</h6>
+                    <small className="text-muted" style={{ fontSize: '0.75rem' }}>Jaipur, Rajasthan</small>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="col-md-4">
-              <div className="card h-100 border-0 rounded-4 p-4 shadow-sm bg-white">
-                <div className="d-flex text-warning mb-3">
-                  <i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i><i className="bi bi-star-fill"></i>
+              <div className="card h-100 ornamental-border rounded-3 p-4 shadow-sm bg-white">
+                <div className="d-flex text-gold mb-3 small">
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill me-1"></i>
+                  <i className="bi bi-star-fill"></i>
                 </div>
-                <p className="text-muted fst-italic mb-4">
-                  "From instant booking without upfront card deductions to the Ayurvedic spa treatment, HotelPro sets the gold benchmark for Indian luxury hospitality."
+                <p className="small text-charcoal-muted fst-italic mb-4" style={{ lineHeight: '1.7' }}>
+                  "The Malabar Backwaters suite was a haven of stillness. Honest pricing, no surprise fees, and a genuine warmth from the concierge team made all the difference."
                 </p>
-                <div className="d-flex align-items-center gap-3 mt-auto">
-                  <div className="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '42px', height: '42px', background: 'var(--hotel-navy)' }}>
+                <div className="d-flex align-items-center gap-3 mt-auto pt-3 border-top">
+                  <div
+                    className="rounded-circle d-flex align-items-center justify-content-center fw-bold small"
+                    style={{ width: '38px', height: '38px', background: 'var(--color-indigo)', color: '#FFFFFF' }}
+                  >
                     SK
                   </div>
                   <div>
-                    <h6 className="mb-0 fw-bold">Sneha & Aditya Kulkarni</h6>
-                    <small className="text-muted">Bengaluru, Karnataka</small>
+                    <h6 className="mb-0 fw-semibold text-indigo small">Sneha & Aditya Kulkarni</h6>
+                    <small className="text-muted" style={{ fontSize: '0.75rem' }}>Bengaluru, Karnataka</small>
                   </div>
                 </div>
               </div>

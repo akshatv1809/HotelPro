@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import * as bookingService from '../services/bookingService';
+import { getRoomDestination } from '../components/rooms/RoomCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const BookingConfirmation = () => {
@@ -37,19 +38,21 @@ const BookingConfirmation = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner text="Retrieving royal reservation voucher..." fullPage />;
+    return <LoadingSpinner text="Retrieving reservation voucher..." fullPage />;
   }
 
   if (error || !booking) {
     return (
-      <div className="container py-5 text-center">
-        <div className="card p-5 border-0 shadow-sm rounded-4 max-w-lg mx-auto">
-          <i className="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
-          <h3 className="fw-bold font-serif">Reservation Not Found</h3>
-          <p className="text-muted">{error || 'Unable to retrieve this reservation.'}</p>
-          <Link to="/dashboard" className="btn btn-navy mt-3">
-            Go to My Reservations
-          </Link>
+      <div className="container py-5 text-center" style={{ minHeight: '70vh' }}>
+        <div className="card ornamental-border p-5 shadow-sm rounded-3 mx-auto" style={{ maxWidth: '540px' }}>
+          <i className="bi bi-exclamation-triangle fs-1 text-gold mb-3"></i>
+          <h3 className="fw-bold font-serif text-indigo">Reservation Not Found</h3>
+          <p className="text-muted">{error || 'Unable to retrieve this reservation voucher.'}</p>
+          <div className="mt-3">
+            <Link to="/dashboard" className="btn btn-indigo">
+              Go to My Reservations
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -57,6 +60,7 @@ const BookingConfirmation = () => {
 
   const room = booking.room || {};
   const user = booking.user || {};
+  const destination = getRoomDestination(room);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';
@@ -70,58 +74,61 @@ const BookingConfirmation = () => {
 
   const formattedTotal = Number(booking.totalPrice || 0).toLocaleString('en-IN');
   const formattedRate = Number(booking.pricePerNight || 0).toLocaleString('en-IN');
+  const refCode = `HP-${booking._id?.toString().slice(-8).toUpperCase()}`;
 
   return (
-    <div className="py-5">
+    <div className="py-5" style={{ minHeight: '80vh', backgroundColor: 'var(--color-ivory)' }}>
       <div className="container" style={{ maxWidth: '820px' }}>
         {/* Success Header Card */}
-        <div className="card border-0 shadow-sm rounded-4 p-4 text-center bg-white mb-4 border">
+        <div className="card ornamental-border rounded-3 p-4 text-center bg-white mb-4 shadow-sm">
           <div
             className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-            style={{ width: '70px', height: '70px', background: '#D1E7DD', color: '#0F5132' }}
+            style={{ width: '64px', height: '64px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
           >
-            <i className="bi bi-check-lg fs-1"></i>
+            <i className="bi bi-check2 fs-1"></i>
           </div>
-          <span className="text-uppercase fw-bold small text-success" style={{ letterSpacing: '1.5px' }}>
-            🙏 Shubh Yatra &bull; Reservation Confirmed
+          <span className="hero-tag mb-1 d-inline-block">
+            शुभ यात्रा &bull; Reservation Confirmed
           </span>
-          <h2 className="display-6 fw-bold font-serif mt-1">Thank You for Choosing HotelPro</h2>
-          <p className="text-muted mb-3">
-            Your royal suite is confirmed and awaiting your arrival with a traditional garland & aarti welcome.
+          <h2 className="display-6 fw-bold font-serif text-indigo mt-1">
+            We Await Your Arrival
+          </h2>
+          <p className="text-muted mb-3 mx-auto small" style={{ maxWidth: '560px' }}>
+            Your sanctuary reservation has been confirmed in the server database. A traditional welcome and dedicated hospitality service await you.
           </p>
-          <div className="d-inline-flex align-items-center justify-content-center gap-2 p-2 px-3 bg-light rounded-3 mx-auto border">
+          <div className="d-inline-flex align-items-center justify-content-center gap-2 p-2 px-3 bg-ivory rounded-2 mx-auto border" style={{ borderColor: 'rgba(197, 164, 109, 0.3)' }}>
             <span className="text-muted small">Booking Reference Code:</span>
-            <strong className="text-primary font-monospace fs-6">
-              HP-IND-{booking._id?.toString().slice(-8).toUpperCase()}
+            <strong className="text-indigo font-monospace fs-6">
+              {refCode}
             </strong>
           </div>
         </div>
 
         {/* Printable Reservation Receipt Card */}
-        <div className="card border-0 shadow rounded-4 p-4 p-md-5 bg-white mb-4" id="printable-receipt">
+        <div className="card ornamental-border rounded-3 p-4 p-md-5 bg-white mb-4 shadow-md" id="printable-receipt">
           {/* Receipt Top Bar */}
-          <div className="d-flex justify-content-between align-items-center pb-4 border-bottom mb-4">
+          <div className="d-flex justify-content-between align-items-center pb-4 border-bottom mb-4" style={{ borderColor: 'rgba(197, 164, 109, 0.25)' }}>
             <div>
-              <span className="brand-title fs-4">
-                🏛️ Hotel<span className="brand-dot">Pro</span>
-              </span>
-              <p className="text-muted small mb-0">Grand Palace & Luxury Resorts &bull; Lake Pichola, Udaipur</p>
-              <small className="text-muted" style={{ fontSize: '0.72rem' }}>GSTIN: 08AAACH9876K1Z9 &bull; State Code: 08 (Rajasthan)</small>
+              <div className="hotelpro-wordmark">
+                HOTEL<span className="accent">PRO</span>
+              </div>
+              <p className="text-muted small mb-0">Sanctuary Stays & Boutique Heritage Accommodations &bull; {destination}</p>
+              <small className="text-muted" style={{ fontSize: '0.72rem' }}>Govt Tax ID: 08AAACH9876K1Z9 &bull; State Code: 08 (Rajasthan)</small>
             </div>
             <div className="text-end">
-              <span className="badge bg-success py-2 px-3 fs-6">
+              <span className="badge-status badge-status-confirmed py-1 px-3">
                 Status: {booking.bookingStatus}
               </span>
-              <small className="d-block text-muted mt-1">
-                Booked: {formatDate(booking.createdAt)}
+              <small className="d-block text-muted mt-1" style={{ fontSize: '0.75rem' }}>
+                Confirmed: {formatDate(booking.createdAt)}
               </small>
             </div>
           </div>
 
           {/* Reserved Room Summary */}
-          <div className="row g-4 align-items-center mb-4 pb-4 border-bottom">
+          <div className="row g-4 align-items-center mb-4 pb-4 border-bottom" style={{ borderColor: 'rgba(37, 37, 37, 0.08)' }}>
             <div className="col-md-4">
-              <div className="rounded-3 overflow-hidden shadow-sm" style={{ height: '140px' }}>
+              <div className="rounded-2 overflow-hidden shadow-sm" style={{ height: '140px', backgroundColor: 'var(--color-indigo)' }}>
                 <img
                   src={
                     room.images?.[0] ||
@@ -134,66 +141,66 @@ const BookingConfirmation = () => {
             </div>
             <div className="col-md-8">
               <div className="d-flex gap-2 align-items-center mb-1">
-                <span className="badge badge-gold">{room.type}</span>
-                <span className="badge bg-light text-dark border">Suite #{room.roomNumber}</span>
+                <span className="badge-status badge-status-available" style={{ fontSize: '0.72rem' }}>{room.type}</span>
+                <span className="badge bg-ivory text-indigo border" style={{ fontSize: '0.72rem', borderColor: 'rgba(197, 164, 109, 0.3)' }}>Suite #{room.roomNumber}</span>
               </div>
-              <h4 className="fw-bold font-serif mb-2">{room.title}</h4>
+              <h4 className="fw-bold font-serif text-indigo mb-2">{room.title}</h4>
               <p className="text-muted small mb-0">
-                <i className="bi bi-moon-stars me-1 text-primary"></i>
-                {room.bedType || 'Plush Bedding'} &bull; Up to {booking.guests} Guest(s)
+                <i className="bi bi-moon-stars me-1 text-gold"></i>
+                {room.bedType || 'Royal King Bed'} &bull; Up to {booking.guests} Guest(s)
               </p>
             </div>
           </div>
 
           {/* Booking Details Grid */}
-          <div className="row g-4 mb-4 pb-4 border-bottom">
+          <div className="row g-4 mb-4 pb-4 border-bottom" style={{ borderColor: 'rgba(37, 37, 37, 0.08)' }}>
             <div className="col-sm-6 col-md-3">
-              <small className="text-muted d-block fw-semibold">Check-in</small>
-              <strong className="fs-6 text-dark">{formatDate(booking.checkIn)}</strong>
-              <small className="d-block text-muted">From 2:00 PM IST</small>
+              <small className="text-muted d-block fw-semibold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Check-in</small>
+              <strong className="fs-6 text-indigo">{formatDate(booking.checkIn)}</strong>
+              <small className="d-block text-muted" style={{ fontSize: '0.75rem' }}>From 2:00 PM IST</small>
             </div>
             <div className="col-sm-6 col-md-3">
-              <small className="text-muted d-block fw-semibold">Check-out</small>
-              <strong className="fs-6 text-dark">{formatDate(booking.checkOut)}</strong>
-              <small className="d-block text-muted">Until 11:00 AM IST</small>
+              <small className="text-muted d-block fw-semibold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Check-out</small>
+              <strong className="fs-6 text-indigo">{formatDate(booking.checkOut)}</strong>
+              <small className="d-block text-muted" style={{ fontSize: '0.75rem' }}>Until 11:00 AM IST</small>
             </div>
             <div className="col-sm-6 col-md-3">
-              <small className="text-muted d-block fw-semibold">Duration</small>
-              <strong className="fs-6 text-dark">
-                {booking.nights} Night{booking.nights > 1 ? 's' : ''}
+              <small className="text-muted d-block fw-semibold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Duration</small>
+              <strong className="fs-6 text-indigo">
+                {booking.nights} {booking.nights > 1 ? 'Nights' : 'Night'}
               </strong>
-              <small className="d-block text-muted">{booking.guests} Guest(s)</small>
+              <small className="d-block text-muted" style={{ fontSize: '0.75rem' }}>{booking.guests} Guest(s)</small>
             </div>
             <div className="col-sm-6 col-md-3">
-              <small className="text-muted d-block fw-semibold">Payment Status</small>
-              <span className="badge bg-warning text-dark mt-1">
+              <small className="text-muted d-block fw-semibold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Payment Mode</small>
+              <span className="badge-status badge-status-pending mt-1">
                 {booking.paymentStatus}
               </span>
-              <small className="d-block text-muted mt-1">Payable at Front Desk</small>
+              <small className="d-block text-muted mt-1" style={{ fontSize: '0.75rem' }}>Payable at Concierge</small>
             </div>
           </div>
 
           {/* Guest Information */}
-          <div className="mb-4 pb-4 border-bottom">
-            <h6 className="fw-bold text-uppercase small text-muted mb-3" style={{ letterSpacing: '1px' }}>
+          <div className="mb-4 pb-4 border-bottom" style={{ borderColor: 'rgba(37, 37, 37, 0.08)' }}>
+            <h6 className="fw-bold text-uppercase small text-indigo mb-3" style={{ letterSpacing: '1px' }}>
               Primary Guest & Contact
             </h6>
             <div className="row g-3">
               <div className="col-md-4">
-                <small className="text-muted d-block">Guest Name</small>
-                <strong className="text-dark">{user.name || 'Valued Guest'}</strong>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>Guest Name</small>
+                <strong className="text-charcoal">{user.name || 'Valued Guest'}</strong>
               </div>
               <div className="col-md-4">
-                <small className="text-muted d-block">Email Address</small>
-                <strong className="text-dark">{user.email || 'N/A'}</strong>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>Email Address</small>
+                <strong className="text-charcoal">{user.email || 'N/A'}</strong>
               </div>
               <div className="col-md-4">
-                <small className="text-muted d-block">Contact Phone</small>
-                <strong className="text-dark">{user.phone || 'On Record'}</strong>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>Contact Phone</small>
+                <strong className="text-charcoal">{user.phone || 'On Record'}</strong>
               </div>
             </div>
             {booking.specialRequests && (
-              <div className="mt-3 p-3 bg-light rounded-3 small border">
+              <div className="mt-3 p-3 bg-ivory rounded-2 small border" style={{ borderColor: 'rgba(197, 164, 109, 0.25)' }}>
                 <strong>Special Requests:</strong> {booking.specialRequests}
               </div>
             )}
@@ -201,37 +208,37 @@ const BookingConfirmation = () => {
 
           {/* Pricing Summary in INR */}
           <div>
-            <h6 className="fw-bold text-uppercase small text-muted mb-3" style={{ letterSpacing: '1px' }}>
-              Tariff & Tax Invoice Estimate
+            <h6 className="fw-bold text-uppercase small text-indigo mb-3" style={{ letterSpacing: '1px' }}>
+              Tariff & Invoice Estimate
             </h6>
             <div className="d-flex justify-content-between mb-2 small text-muted">
               <span>Suite Tariff (₹{formattedRate} &times; {booking.nights} nights)</span>
               <span>₹{formattedTotal}</span>
             </div>
             <div className="d-flex justify-content-between mb-2 small text-muted">
-              <span>Applicable Goods & Services Tax (GST Included)</span>
-              <span>₹0</span>
+              <span>Hospitality GST</span>
+              <span>Included</span>
             </div>
-            <div className="d-flex justify-content-between fw-bold fs-5 text-dark pt-2 border-top">
+            <div className="d-flex justify-content-between fw-bold fs-5 text-indigo pt-2 border-top" style={{ borderColor: 'rgba(37, 37, 37, 0.1)' }}>
               <span>Total Estimated Amount</span>
-              <span className="text-primary font-serif">₹{formattedTotal}</span>
+              <span className="font-serif">₹{formattedTotal}</span>
             </div>
-            <small className="text-muted d-block mt-2">
-              Payment is collected upon arrival via UPI (Google Pay, PhonePe, Paytm), Debit/Credit Cards, or Cash. Please carry your original Aadhaar card or Govt Photo ID.
+            <small className="text-muted d-block mt-2" style={{ fontSize: '0.75rem' }}>
+              Payment is settled upon arrival via UPI (Google Pay, PhonePe, Paytm), Debit/Credit Cards, or Cash. Please carry an official Govt. photo ID.
             </small>
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="d-flex flex-wrap justify-content-between gap-3">
-          <Link to="/" className="btn btn-outline-secondary px-4 py-2 rounded-3">
+          <Link to="/" className="btn btn-outline-indigo px-4 py-2">
             <i className="bi bi-house me-1"></i> Return to Home
           </Link>
           <div className="d-flex gap-2">
-            <button onClick={handlePrint} className="btn btn-outline-navy px-4 py-2 rounded-3">
+            <button onClick={handlePrint} className="btn btn-outline-indigo px-4 py-2">
               <i className="bi bi-printer me-1"></i> Print Voucher
             </button>
-            <Link to="/dashboard" className="btn btn-navy px-4 py-2 rounded-3 shadow-sm">
+            <Link to="/dashboard" className="btn btn-indigo px-4 py-2 shadow-sm">
               <i className="bi bi-calendar2-check me-1"></i> View My Reservations
             </Link>
           </div>

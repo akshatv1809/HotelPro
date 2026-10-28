@@ -3,60 +3,68 @@ import { Link } from 'react-router-dom';
 
 const About = () => {
   return (
-    <div className="py-5">
+    <div className="py-5" style={{ minHeight: '80vh', backgroundColor: 'var(--color-ivory)' }}>
       <div className="container">
         {/* Hero Banner */}
         <div className="text-center mb-5">
-          <span className="text-uppercase fw-bold small text-muted" style={{ letterSpacing: '2px' }}>
-            Heritage & Distinction &bull; अतिथि देवो भव:
+          <span className="hero-tag mb-1 d-inline-block">
+            अतिथि देवो भव &bull; Our Story & Ethos
           </span>
-          <h1 className="display-4 fw-bold font-serif mt-1">The Story of HotelPro Palaces</h1>
-          <p className="lead text-muted mx-auto" style={{ maxWidth: '740px' }}>
-            Born from a deep devotion to Rajputana architectural majesty, Kerala Ayurvedic serenity, and the timeless Indian ethos of treating every guest as a divine presence.
+          <h1 className="display-4 fw-bold font-serif text-indigo mt-1">
+            The Art of Indian Living
+          </h1>
+          <p className="lead text-muted mx-auto" style={{ maxWidth: '720px' }}>
+            Born from a deep devotion to Rajputana architectural majesty, Kerala Ayurvedic serenity, and the ancient Indian ethos of treating every traveler as a sacred presence.
           </p>
-          <div className="royal-divider"></div>
+          <div className="jali-divider">
+            <span className="jali-symbol">✦</span>
+          </div>
         </div>
 
-        {/* Story Section */}
+        {/* Narrative Section 1 */}
         <div className="row align-items-center g-5 mb-5 pb-4">
           <div className="col-lg-6">
             <div className="position-relative">
               <img
                 src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80"
-                alt="Udaipur Palace resort"
-                className="rounded-4 shadow-lg w-100 object-fit-cover"
-                style={{ height: '420px' }}
+                alt="Udaipur palace lake reflection"
+                className="rounded-3 shadow-md w-100 object-fit-cover"
+                style={{ height: '420px', border: '1px solid rgba(197, 164, 109, 0.3)' }}
               />
               <div
-                className="position-absolute bottom-0 start-0 m-4 p-3 bg-white rounded-3 shadow-md border"
-                style={{ maxWidth: '260px' }}
+                className="position-absolute bottom-0 start-0 m-4 p-3 bg-white rounded-2 shadow-sm border"
+                style={{ maxWidth: '260px', borderColor: 'rgba(197, 164, 109, 0.4)' }}
               >
-                <div className="fw-bold font-serif text-navy">Founded in 2018</div>
-                <small className="text-muted">Over 8 years of authentic Indian royal hospitality</small>
+                <div className="fw-bold font-serif text-indigo">Preserving Living Heritage</div>
+                <small className="text-muted">Over 8 years of authentic boutique Indian hospitality</small>
               </div>
             </div>
           </div>
 
           <div className="col-lg-6">
-            <h3 className="fw-bold font-serif mb-3">A Celebration of Indian Architectural Splendor</h3>
-            <p className="text-muted mb-3" style={{ lineHeight: '1.8' }}>
-              At HotelPro, our vision is to revive the regal splendor of Indian royal courts while providing contemporary five-star eco-luxury. Drawing inspiration from Mewar palaces, Jaipur havelis, and tranquil Malabar backwaters, our suites feature hand-chiseled jharokhas, brass lanterns, fresco murals, and Italian marble courtyards.
+            <span className="text-gold small fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>
+              Architectural Roots
+            </span>
+            <h3 className="fw-bold font-serif text-indigo my-2">A Celebration of Indian Artisanal Splendor</h3>
+            <div className="gold-rule"></div>
+            <p className="text-charcoal-muted mb-3" style={{ lineHeight: '1.8' }}>
+              At HotelPro, our vision is to revive the contemplative grandeur of Indian royal residences while providing contemporary five-star eco-luxury. Drawing inspiration from Mewar palaces, Jaipur havelis, and tranquil Malabar backwaters, our suites feature hand-chiseled stone jaalis, brass lanterns, fresco motifs, and Italian marble courtyards.
             </p>
-            <p className="text-muted mb-4" style={{ lineHeight: '1.8' }}>
-              Every guest is welcomed with traditional marigold garlands and sandalwood tilak. Whether you are visiting for a destination wedding, an executive strategy summit, or an Ayurvedic Panchakarma retreat, our devoted Khidmatgars orchestrate each moment with grace.
+            <p className="text-charcoal-muted mb-4" style={{ lineHeight: '1.8' }}>
+              Every guest is welcomed with traditional marigold garlands and sandalwood tilak. Whether you are traveling for a quiet retreat, a cultural pilgrimage, or an executive summit, our devoted Khidmatgars orchestrate each moment with grace and discretion.
             </p>
 
             <div className="row g-3">
               <div className="col-sm-6">
-                <div className="p-3 bg-white rounded-3 border">
-                  <h4 className="fw-bold text-navy font-serif mb-1">99.2%</h4>
-                  <small className="text-muted">Indian & Global Guest Approval</small>
+                <div className="p-3 bg-white rounded-2 border" style={{ borderColor: 'rgba(197, 164, 109, 0.3)' }}>
+                  <h4 className="fw-bold text-indigo font-serif mb-1">99.4%</h4>
+                  <small className="text-muted">Guest Satisfaction & Return Index</small>
                 </div>
               </div>
               <div className="col-sm-6">
-                <div className="p-3 bg-white rounded-3 border">
-                  <h4 className="fw-bold text-navy font-serif mb-1">45+</h4>
-                  <small className="text-muted">Heritage Tourism & Hospitality Awards</small>
+                <div className="p-3 bg-white rounded-2 border" style={{ borderColor: 'rgba(197, 164, 109, 0.3)' }}>
+                  <h4 className="fw-bold text-indigo font-serif mb-1">100%</h4>
+                  <small className="text-muted">Eco-Minded Heritage Restoration</small>
                 </div>
               </div>
             </div>
@@ -64,59 +72,65 @@ const About = () => {
         </div>
 
         {/* Core Pillars */}
-        <div className="card border-0 bg-white rounded-4 shadow-sm p-4 p-md-5 mb-5 border">
+        <div id="architecture" className="card ornamental-border bg-white rounded-3 shadow-sm p-4 p-md-5 mb-5">
           <div className="text-center mb-5">
-            <h3 className="fw-bold font-serif">Pillars of Indian Hospitality</h3>
+            <span className="hero-tag mb-1 d-inline-block">Cultural Tenets</span>
+            <h3 className="fw-bold font-serif text-indigo">Pillars of Indian Hospitality</h3>
             <p className="text-muted small">Honoring centuries of cultural reverence and mindful care</p>
-            <div className="royal-divider"></div>
+            <div className="jali-divider">
+              <span className="jali-symbol">✦</span>
+            </div>
           </div>
 
           <div className="row g-4">
             <div className="col-md-4 text-center">
-              <div className="badge bg-navy p-3 rounded-circle mb-3" style={{ background: 'var(--hotel-navy)' }}>
-                <i className="bi bi-heart-pulse fs-3 text-white"></i>
+              <div
+                className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                style={{ width: '56px', height: '56px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+              >
+                <i className="bi bi-heart-pulse fs-3"></i>
               </div>
-              <h5 className="fw-bold font-serif mb-2">Atithi Devo Bhava</h5>
+              <h5 className="fw-bold font-serif text-indigo mb-2">Atithi Devo Bhava</h5>
               <p className="text-muted small">
-                The guest is sacred. Anticipating your wishes with heartfelt warmth, from authentic Sattvik and Jain dietary preparations to evening tea ceremonies.
+                The guest is divine. Anticipating your wishes with heartfelt warmth, from authentic Sattvik and Jain dietary preparations to evening courtyard tea ceremonies.
               </p>
             </div>
 
             <div className="col-md-4 text-center">
-              <div className="badge bg-gold p-3 rounded-circle mb-3" style={{ background: 'var(--hotel-gold)' }}>
-                <i className="bi bi-tree fs-3 text-white"></i>
+              <div
+                className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                style={{ width: '56px', height: '56px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+              >
+                <i className="bi bi-flower2 fs-3"></i>
               </div>
-              <h5 className="fw-bold font-serif mb-2">Sustainable Heritage</h5>
+              <h5 className="fw-bold font-serif text-indigo mb-2">Mindful Craft & Architecture</h5>
               <p className="text-muted small">
-                100% solar-assisted resort operations, rainwater harvesting, organic local farm partnerships, and zero single-use plastics.
+                Partnering with multi-generational master stone carvers, textile weavers, and brass smiths to sustain living Indian artisan traditions.
               </p>
             </div>
 
             <div className="col-md-4 text-center">
-              <div className="badge bg-navy p-3 rounded-circle mb-3" style={{ background: 'var(--hotel-navy)' }}>
-                <i className="bi bi-shield-lock fs-3 text-white"></i>
+              <div
+                className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                style={{ width: '56px', height: '56px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+              >
+                <i className="bi bi-droplet-half fs-3"></i>
               </div>
-              <h5 className="fw-bold font-serif mb-2">Ayurveda & Rejuvenation</h5>
+              <h5 className="fw-bold font-serif text-indigo mb-2">Ayurveda & Rejuvenation</h5>
               <p className="text-muted small">
-                Authentic Vaidya consultations, Kerala herbal therapies, morning hatha yoga, and pranayama sessions by lake waters.
+                Rooted in authentic Kerala Ayurvedic healing principles, therapeutic herbal oil formulations, and morning yoga overlooking calm waters.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Call to Action */}
-        <div
-          className="rounded-4 p-5 text-center text-white position-relative overflow-hidden shadow"
-          style={{
-            background: 'linear-gradient(135deg, var(--hotel-navy) 0%, var(--hotel-royal) 100%)',
-          }}
-        >
-          <h2 className="display-6 fw-bold font-serif mb-3 text-white">Your Royal Journey Awaits</h2>
-          <p className="text-light opacity-90 mx-auto mb-4" style={{ maxWidth: '620px' }}>
-            Allow our palace concierges to prepare your sanctuary. Reserve your stay at our signature suites today.
-          </p>
-          <Link to="/rooms" className="btn btn-gold btn-lg px-4 shadow">
-            Explore Royal Suites & Tariffs
+        {/* CTA to Explore */}
+        <div className="text-center py-4">
+          <Link to="/rooms" className="btn btn-indigo px-4 py-2 me-2">
+            Explore Stays & Sanctuaries
+          </Link>
+          <Link to="/contact" className="btn btn-outline-indigo px-4 py-2">
+            Contact Concierge Desk
           </Link>
         </div>
       </div>

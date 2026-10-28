@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import * as roomService from '../services/roomService';
 import * as bookingService from '../services/bookingService';
 import { useAuth } from '../context/AuthContext';
+import { getRoomDestination } from '../components/rooms/RoomCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import AlertMessage from '../components/common/AlertMessage';
 import StarRating from '../components/common/StarRating';
@@ -47,7 +48,7 @@ const RoomDetail = () => {
         }
       } catch (err) {
         console.error('Failed to load room:', err);
-        setError(err.response?.data?.message || 'Room could not be found');
+        setError(err.response?.data?.message || 'The requested accommodation could not be found');
       } finally {
         setLoading(false);
       }
@@ -116,76 +117,85 @@ const RoomDetail = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner text="Retrieving royal suite details..." fullPage />;
+    return <LoadingSpinner text="Retrieving royal accommodation details..." fullPage />;
   }
 
   if (error || !room) {
     return (
       <div className="container py-5 text-center">
-        <div className="card p-5 border-0 shadow-sm rounded-4 max-w-lg mx-auto">
-          <i className="bi bi-exclamation-octagon fs-1 text-danger mb-3"></i>
-          <h3 className="fw-bold font-serif">Suite Not Found</h3>
-          <p className="text-muted">{error || 'The requested accommodation could not be found.'}</p>
-          <Link to="/rooms" className="btn btn-navy mt-3">
-            Back to Royal Suites
-          </Link>
+        <div className="card ornamental-border p-5 shadow-sm rounded-3 mx-auto" style={{ maxWidth: '540px' }}>
+          <i className="bi bi-exclamation-octagon fs-1 text-terracotta mb-3"></i>
+          <h3 className="fw-bold font-serif text-indigo">Accommodation Not Found</h3>
+          <p className="text-muted">{error || 'The requested room or suite could not be located.'}</p>
+          <div className="mt-3">
+            <Link to="/rooms" className="btn btn-indigo">
+              Back to Accommodations
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Indian Hospitality GST calculation (12% for rooms <= ₹7,500, 18% for luxury suites > ₹7,500)
+  const destination = getRoomDestination(room);
   const gstRate = room.pricePerNight > 7500 ? 0.18 : 0.12;
   const gstAmount = Math.round(totalPrice * gstRate);
   const grandTotal = totalPrice + gstAmount;
 
   return (
-    <div className="py-5">
+    <div className="py-5" style={{ minHeight: '80vh' }}>
       <div className="container">
         {/* Breadcrumb Navigation */}
         <nav aria-label="breadcrumb" className="mb-4">
-          <ol className="breadcrumb">
+          <ol className="breadcrumb small">
             <li className="breadcrumb-item">
               <Link to="/" className="text-decoration-none text-muted">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/rooms" className="text-decoration-none text-muted">Palaces & Suites</Link>
+              <Link to="/rooms" className="text-decoration-none text-muted">Rooms & Suites</Link>
             </li>
-            <li className="breadcrumb-item active text-dark fw-bold" aria-current="page">
+            <li className="breadcrumb-item active text-indigo fw-semibold" aria-current="page">
               {room.title}
             </li>
           </ol>
         </nav>
 
         {/* Room Header Info */}
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3 pb-3 border-bottom" style={{ borderColor: 'rgba(197, 164, 109, 0.25)' }}>
           <div>
             <div className="d-flex align-items-center gap-2 mb-2">
-              <span className="badge badge-gold">{room.type}</span>
-              <span className="badge bg-light text-secondary border">Suite #{room.roomNumber}</span>
+              <span className="badge-status badge-status-available">
+                {room.type}
+              </span>
+              <span className="badge bg-ivory text-indigo border" style={{ borderColor: 'rgba(197, 164, 109, 0.4)' }}>
+                Suite #{room.roomNumber}
+              </span>
               <StarRating rating={room.rating || 4.9} />
             </div>
-            <h1 className="display-6 fw-bold font-serif mb-1">{room.title}</h1>
-            <p className="text-muted mb-0">
-              <i className="bi bi-geo-alt-fill text-warning me-1"></i> HotelPro Grand Palace &bull; Lake Pichola, Udaipur, Rajasthan
+            <h1 className="display-6 fw-bold font-serif mb-1 text-indigo">{room.title}</h1>
+            <p className="text-muted mb-0 small">
+              <i className="bi bi-geo-alt text-gold me-1"></i>
+              <span>HotelPro Sanctuary &bull; {destination}</span>
             </p>
           </div>
 
           <div className="text-md-end">
-            <span className="text-muted small">Tariff per night</span>
+            <span className="text-muted small text-uppercase" style={{ letterSpacing: '0.5px' }}>
+              Nightly Rate
+            </span>
             <div className="d-flex align-items-baseline gap-1">
-              <span className="display-6 fw-bold font-serif" style={{ color: 'var(--hotel-royal)' }}>
+              <span className="display-6 fw-bold font-serif text-indigo">
                 ₹{Number(room.pricePerNight).toLocaleString('en-IN')}
               </span>
-              <span className="text-muted">+ GST</span>
+              <span className="small text-muted">+ taxes</span>
             </div>
           </div>
         </div>
 
-        {/* Room Image Gallery */}
+        {/* Gallery */}
         <div className="row g-3 mb-5">
           <div className="col-lg-8">
-            <div className="rounded-4 overflow-hidden shadow-sm" style={{ height: '480px' }}>
+            <div className="rounded-3 overflow-hidden shadow-sm" style={{ height: '460px', backgroundColor: 'var(--color-indigo)' }}>
               <img
                 src={activeImage || room.images[0]}
                 alt={room.title}
@@ -200,10 +210,14 @@ const RoomDetail = () => {
                 room.images.map((img, idx) => (
                   <div
                     key={idx}
-                    className={`rounded-3 overflow-hidden cursor-pointer border ${
-                      activeImage === img ? 'border-primary border-3 shadow' : 'opacity-75'
+                    className={`rounded-3 overflow-hidden border cursor-pointer ${
+                      activeImage === img ? 'border-2 shadow-sm' : 'opacity-75'
                     }`}
-                    style={{ height: '148px', cursor: 'pointer' }}
+                    style={{
+                      height: '142px',
+                      cursor: 'pointer',
+                      borderColor: activeImage === img ? 'var(--color-gold)' : 'rgba(37, 37, 37, 0.12)',
+                    }}
                     onClick={() => setActiveImage(img)}
                   >
                     <img
@@ -217,53 +231,55 @@ const RoomDetail = () => {
           </div>
         </div>
 
-        {/* Details & Booking Form Split */}
+        {/* Details & Booking Split */}
         <div className="row g-5">
           {/* Left Column: Room Overview & Amenities */}
           <div className="col-lg-7">
-            {/* Quick Specs Cards */}
+            {/* Quick Specs */}
             <div className="row g-3 mb-4">
               <div className="col-sm-4">
                 <div className="p-3 bg-white rounded-3 border text-center shadow-sm">
-                  <i className="bi bi-people fs-4 text-warning mb-1 d-block"></i>
-                  <span className="small text-muted d-block">Occupancy</span>
-                  <strong className="text-dark">Up to {room.capacity} Guests</strong>
+                  <i className="bi bi-people fs-4 text-gold mb-1 d-block"></i>
+                  <span className="small text-muted d-block">Guest Capacity</span>
+                  <strong className="text-indigo">Up to {room.capacity} Guests</strong>
                 </div>
               </div>
               <div className="col-sm-4">
                 <div className="p-3 bg-white rounded-3 border text-center shadow-sm">
-                  <i className="bi bi-moon-stars fs-4 text-warning mb-1 d-block"></i>
-                  <span className="small text-muted d-block">Bed Configuration</span>
-                  <strong className="text-dark">{room.bedType || 'Royal King Bed'}</strong>
+                  <i className="bi bi-moon-stars fs-4 text-gold mb-1 d-block"></i>
+                  <span className="small text-muted d-block">Bed Type</span>
+                  <strong className="text-indigo">{room.bedType || 'Royal King Bed'}</strong>
                 </div>
               </div>
               <div className="col-sm-4">
                 <div className="p-3 bg-white rounded-3 border text-center shadow-sm">
-                  <i className="bi bi-aspect-ratio fs-4 text-warning mb-1 d-block"></i>
+                  <i className="bi bi-bounding-box fs-4 text-gold mb-1 d-block"></i>
                   <span className="small text-muted d-block">Living Space</span>
-                  <strong className="text-dark">{room.roomSize || 55} m²</strong>
+                  <strong className="text-indigo">{room.roomSize || 50} m²</strong>
                 </div>
               </div>
             </div>
 
-            {/* Room Description */}
-            <div className="card border-0 bg-white rounded-4 shadow-sm p-4 mb-4">
-              <h4 className="fw-bold font-serif mb-3">Suite Overview & Architecture</h4>
-              <p className="text-muted leading-relaxed mb-0" style={{ lineHeight: '1.8' }}>
+            {/* Description */}
+            <div className="card ornamental-border rounded-3 p-4 mb-4 shadow-sm">
+              <h4 className="fw-bold font-serif mb-2 text-indigo">Architectural Heritage & Living</h4>
+              <div className="gold-rule"></div>
+              <p className="text-charcoal-muted leading-relaxed mb-0" style={{ lineHeight: '1.8' }}>
                 {room.description}
               </p>
             </div>
 
             {/* Room Amenities */}
-            <div className="card border-0 bg-white rounded-4 shadow-sm p-4 mb-4">
-              <h4 className="fw-bold font-serif mb-3">Royal Privileges & Amenities</h4>
+            <div className="card ornamental-border rounded-3 p-4 mb-4 shadow-sm">
+              <h4 className="fw-bold font-serif mb-2 text-indigo">Sanctuary Amenities & Care</h4>
+              <div className="gold-rule"></div>
               <div className="row g-3">
                 {room.amenities &&
                   room.amenities.map((amenity, idx) => (
                     <div key={idx} className="col-sm-6">
                       <div className="d-flex align-items-center gap-2">
-                        <i className="bi bi-check-circle-fill text-success fs-5"></i>
-                        <span className="text-dark fw-medium">{amenity}</span>
+                        <i className="bi bi-check2 text-gold fs-5"></i>
+                        <span className="text-charcoal small fw-medium">{amenity}</span>
                       </div>
                     </div>
                   ))}
@@ -271,60 +287,66 @@ const RoomDetail = () => {
             </div>
 
             {/* Hotel Policies (Indian Context) */}
-            <div className="card border-0 bg-white rounded-4 shadow-sm p-4">
-              <h4 className="fw-bold font-serif mb-3">Check-In Norms & Stay Guidelines</h4>
-              <ul className="list-unstyled d-flex flex-column gap-2 text-muted small mb-0">
+            <div className="card ornamental-border rounded-3 p-4 shadow-sm">
+              <h4 className="fw-bold font-serif mb-2 text-indigo">Stay Policies & Guidelines</h4>
+              <div className="gold-rule"></div>
+              <ul className="list-unstyled d-flex flex-column gap-3 text-muted small mb-0">
                 <li className="d-flex gap-2">
-                  <i className="bi bi-clock-history text-primary"></i>
-                  <span><strong>Check-in:</strong> 2:00 PM &bull; <strong>Check-out:</strong> 11:00 AM (Early check-in subject to availability).</span>
+                  <i className="bi bi-clock-history text-gold"></i>
+                  <span><strong>Check-in:</strong> 2:00 PM &bull; <strong>Check-out:</strong> 11:00 AM (Early check-in subject to room availability).</span>
                 </li>
                 <li className="d-flex gap-2">
-                  <i className="bi bi-person-badge text-primary"></i>
-                  <span><strong>Mandatory Govt ID:</strong> As per Govt of India regulations, all Indian adults must present original Aadhaar Card, Passport, or Driving License. PAN card is not valid ID.</span>
+                  <i className="bi bi-person-badge text-gold"></i>
+                  <span><strong>Govt. ID Requirement:</strong> All guests must present an official Govt. of India approved photo ID (Aadhaar, Passport, or Driving License) at the concierge desk.</span>
                 </li>
                 <li className="d-flex gap-2">
-                  <i className="bi bi-arrow-repeat text-primary"></i>
-                  <span><strong>Free Cancellation:</strong> Available up to the check-in day directly from your Guest Portal.</span>
+                  <i className="bi bi-shield-check text-gold"></i>
+                  <span><strong>Transparent Reservation:</strong> Guaranteed room booking. Payment can be settled seamlessly upon arrival via UPI, Credit Card, or Cash.</span>
                 </li>
                 <li className="d-flex gap-2">
-                  <i className="bi bi-credit-card text-primary"></i>
-                  <span><strong>Payment Guarantee:</strong> Reservation is guaranteed without upfront online deduction. Tariff payable upon arrival via UPI, Credit/Debit Card, or NetBanking.</span>
+                  <i className="bi bi-arrow-repeat text-gold"></i>
+                  <span><strong>Flexible Cancellation:</strong> Cancel anytime prior to check-in directly through your Guest Portal with zero cancellation penalties.</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Right Column: Interactive Booking Form */}
+          {/* Right Column: Interactive Booking Card */}
           <div className="col-lg-5">
-            <div className="card border-0 shadow-lg rounded-4 p-4 sticky-top bg-white" style={{ top: '100px' }}>
-              <div className="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+            <div className="card ornamental-border rounded-3 p-4 shadow-md sticky-top" style={{ top: '100px' }}>
+              <div className="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom" style={{ borderColor: 'rgba(197, 164, 109, 0.25)' }}>
                 <div>
-                  <span className="text-muted small">Reserve This Suite</span>
-                  <h4 className="fw-bold font-serif mb-0 text-navy">
+                  <span className="text-muted small text-uppercase" style={{ letterSpacing: '0.5px' }}>
+                    Reserve Your Stay
+                  </span>
+                  <h4 className="fw-bold font-serif mb-0 text-indigo">
                     ₹{Number(room.pricePerNight).toLocaleString('en-IN')}{' '}
                     <small className="text-muted fs-6 fw-normal">/ night</small>
                   </h4>
                 </div>
-                <span className={`badge ${room.status === 'Available' ? 'bg-success' : 'bg-warning text-dark'}`}>
+                <span className={`badge-status ${room.status === 'Available' ? 'badge-status-available' : 'badge-status-maintenance'}`}>
                   {room.status}
                 </span>
               </div>
 
               {bookingError && (
-                <AlertMessage
-                  variant="danger"
-                  message={bookingError}
-                  onClose={() => setBookingError('')}
-                />
+                <div className="mb-3">
+                  <AlertMessage
+                    variant="danger"
+                    message={bookingError}
+                    onClose={() => setBookingError('')}
+                  />
+                </div>
               )}
 
               <form onSubmit={handleBookingSubmit}>
                 {/* Check In Date */}
                 <div className="mb-3">
-                  <label className="form-label small fw-bold text-muted d-flex align-items-center gap-1">
-                    <i className="bi bi-calendar-event text-warning"></i> Check-in Date
+                  <label className="form-label" htmlFor="book-checkIn">
+                    Check-in Date
                   </label>
                   <input
+                    id="book-checkIn"
                     type="date"
                     required
                     min={todayStr}
@@ -336,10 +358,11 @@ const RoomDetail = () => {
 
                 {/* Check Out Date */}
                 <div className="mb-3">
-                  <label className="form-label small fw-bold text-muted d-flex align-items-center gap-1">
-                    <i className="bi bi-calendar-check text-warning"></i> Check-out Date
+                  <label className="form-label" htmlFor="book-checkOut">
+                    Check-out Date
                   </label>
                   <input
+                    id="book-checkOut"
                     type="date"
                     required
                     min={bookingForm.checkIn || todayStr}
@@ -349,12 +372,13 @@ const RoomDetail = () => {
                   />
                 </div>
 
-                {/* Guests count */}
+                {/* Guests */}
                 <div className="mb-3">
-                  <label className="form-label small fw-bold text-muted d-flex align-items-center gap-1">
-                    <i className="bi bi-people text-warning"></i> Guests (Max {room.capacity})
+                  <label className="form-label" htmlFor="book-guests">
+                    Guests (Max {room.capacity})
                   </label>
                   <select
+                    id="book-guests"
                     className="form-select"
                     value={bookingForm.guests}
                     onChange={(e) => setBookingForm({ ...bookingForm, guests: e.target.value })}
@@ -369,58 +393,61 @@ const RoomDetail = () => {
 
                 {/* Special Requests */}
                 <div className="mb-4">
-                  <label className="form-label small fw-semibold text-muted">Special Requests (Optional)</label>
+                  <label className="form-label" htmlFor="book-requests">
+                    Special Requests (Optional)
+                  </label>
                   <textarea
+                    id="book-requests"
                     rows="2"
                     className="form-control"
-                    placeholder="e.g. Jain / Satvik meals, lake view jharokha, anniversary setup..."
+                    placeholder="e.g. Traditional Ayurvedic welcome, quiet courtyard wing, dietary preferences..."
                     value={bookingForm.specialRequests}
                     onChange={(e) => setBookingForm({ ...bookingForm, specialRequests: e.target.value })}
                   ></textarea>
                 </div>
 
-                {/* Price Breakdown in INR */}
+                {/* Night count & Price breakdown */}
                 {nights > 0 && (
-                  <div className="bg-light p-3 rounded-3 mb-4 border">
+                  <div className="bg-ivory p-3 rounded-2 mb-4 border" style={{ borderColor: 'rgba(197, 164, 109, 0.3)' }}>
                     <div className="d-flex justify-content-between small text-muted mb-2">
-                      <span>₹{Number(room.pricePerNight).toLocaleString('en-IN')} &times; {nights} night{nights > 1 ? 's' : ''}</span>
+                      <span>₹{Number(room.pricePerNight).toLocaleString('en-IN')} &times; {nights} {nights === 1 ? 'night' : 'nights'}</span>
                       <span>₹{Number(totalPrice).toLocaleString('en-IN')}</span>
                     </div>
                     <div className="d-flex justify-content-between small text-muted mb-2">
-                      <span>Applicable GST ({(gstRate * 100).toFixed(0)}%)</span>
+                      <span>Applicable Hospitality GST ({(gstRate * 100).toFixed(0)}%)</span>
                       <span>₹{Number(gstAmount).toLocaleString('en-IN')}</span>
                     </div>
-                    <hr className="my-2" />
-                    <div className="d-flex justify-content-between fw-bold text-dark fs-6">
+                    <hr className="my-2" style={{ borderColor: 'rgba(197, 164, 109, 0.3)' }} />
+                    <div className="d-flex justify-content-between fw-bold text-indigo fs-6">
                       <span>Total Estimated Tariff</span>
-                      <span className="text-primary font-serif">₹{Number(grandTotal).toLocaleString('en-IN')}</span>
+                      <span className="font-serif">₹{Number(grandTotal).toLocaleString('en-IN')}</span>
                     </div>
-                    <small className="text-muted d-block mt-2" style={{ fontSize: '0.75rem' }}>
-                      * Pay at check-in via UPI, Card, or Cash. No upfront card charges.
+                    <small className="text-muted d-block mt-2" style={{ fontSize: '0.72rem' }}>
+                      * The server verifies current rates and dates upon booking confirmation. Pay at check-in via UPI or Card.
                     </small>
                   </div>
                 )}
 
-                {/* Reserve Button */}
+                {/* Clear Book This Stay CTA */}
                 <button
                   type="submit"
                   disabled={bookingLoading || nights < 1 || room.status === 'Maintenance'}
-                  className="btn btn-gold btn-lg w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow"
+                  className="btn btn-gold btn-lg w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm"
                 >
                   {bookingLoading ? (
                     <>
                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                      <span>Reserving Suite...</span>
+                      <span>Reserving Your Stay...</span>
                     </>
                   ) : !isAuthenticated ? (
                     <>
                       <i className="bi bi-box-arrow-in-right"></i>
-                      <span>Sign In & Reserve Suite</span>
+                      <span>Sign In & Book This Stay</span>
                     </>
                   ) : (
                     <>
-                      <i className="bi bi-shield-check"></i>
-                      <span>Confirm & Book Suite</span>
+                      <i className="bi bi-check2-circle"></i>
+                      <span>Book This Stay</span>
                     </>
                   )}
                 </button>

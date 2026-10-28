@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
   const handleLogout = () => {
@@ -12,154 +13,173 @@ const Navbar = () => {
     navigate('/');
   };
 
+  const handleExperiencesClick = (e) => {
+    setIsNavCollapsed(true);
+    if (location.pathname === '/') {
+      const el = document.getElementById('experiences');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+    navigate('/#experiences');
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3 border-bottom">
+    <nav className="navbar navbar-expand-lg navbar-hotelpro sticky-top shadow-sm">
       <div className="container">
-        <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
-          <span className="fs-3">🏛️</span>
-          <div>
-            <span className="brand-title">
-              Hotel<span className="brand-dot">Pro</span>
-            </span>
-            <small className="d-block text-muted" style={{ fontSize: '0.65rem', letterSpacing: '1px' }}>
-              ROYAL INDIAN HOSPITALITY
-            </small>
-          </div>
+        {/* Brand Wordmark */}
+        <Link className="navbar-brand d-flex flex-column" to="/" onClick={() => setIsNavCollapsed(true)}>
+          <span className="hotelpro-wordmark">
+            HOTEL<span className="accent">PRO</span>
+          </span>
+          <span className="hotelpro-submark">Sanctuary &bull; India</span>
         </Link>
 
+        {/* Mobile Toggle Button */}
         <button
-          className="navbar-toggler"
+          className="navbar-toggler border-0 p-2"
           type="button"
           onClick={() => setIsNavCollapsed(!isNavCollapsed)}
-          aria-controls="navbarNav"
+          aria-controls="hotelproNavbar"
           aria-expanded={!isNavCollapsed}
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <i className={`bi ${isNavCollapsed ? 'bi-list' : 'bi-x-lg'} fs-3 text-indigo`}></i>
         </button>
 
-        <div className={`collapse navbar-collapse ${!isNavCollapsed ? 'show' : ''}`} id="navbarNav">
-          <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3">
+        {/* Navigation Items */}
+        <div className={`collapse navbar-collapse ${!isNavCollapsed ? 'show' : ''}`} id="hotelproNavbar">
+          <ul className="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2">
             <li className="nav-item">
               <NavLink
-                className={({ isActive }) =>
-                  `nav-link fw-semibold px-2 ${isActive ? 'text-primary' : 'text-dark'}`
-                }
-                to="/"
-                onClick={() => setIsNavCollapsed(true)}
-              >
-                Home
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  `nav-link fw-semibold px-2 ${isActive ? 'text-primary' : 'text-dark'}`
-                }
+                className={({ isActive }) => `nav-link nav-link-hotelpro ${isActive ? 'active' : ''}`}
                 to="/rooms"
                 onClick={() => setIsNavCollapsed(true)}
               >
-                Palaces & Suites
+                Rooms
               </NavLink>
             </li>
             <li className="nav-item">
+              <a
+                className="nav-link nav-link-hotelpro cursor-pointer"
+                href="#experiences"
+                onClick={handleExperiencesClick}
+              >
+                Experiences
+              </a>
+            </li>
+            <li className="nav-item">
               <NavLink
-                className={({ isActive }) =>
-                  `nav-link fw-semibold px-2 ${isActive ? 'text-primary' : 'text-dark'}`
-                }
+                className={({ isActive }) => `nav-link nav-link-hotelpro ${isActive ? 'active' : ''}`}
                 to="/about"
                 onClick={() => setIsNavCollapsed(true)}
               >
-                Royal Heritage
+                Our Story
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink
-                className={({ isActive }) =>
-                  `nav-link fw-semibold px-2 ${isActive ? 'text-primary' : 'text-dark'}`
-                }
+                className={({ isActive }) => `nav-link nav-link-hotelpro ${isActive ? 'active' : ''}`}
                 to="/contact"
                 onClick={() => setIsNavCollapsed(true)}
               >
-                Concierge Desk
+                Contact
               </NavLink>
             </li>
           </ul>
 
+          {/* Action CTAs */}
           <div className="d-flex align-items-center gap-2 mt-3 mt-lg-0">
             {isAuthenticated ? (
-              <div className="dropdown">
-                <button
-                  className="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 rounded-3"
-                  type="button"
-                  id="userDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+              <div className="d-flex align-items-center gap-2">
+                <Link
+                  to="/dashboard"
+                  className="btn btn-outline-indigo btn-sm px-3 py-2"
+                  onClick={() => setIsNavCollapsed(true)}
                 >
-                  <i className="bi bi-person-circle fs-5 text-primary"></i>
-                  <span className="fw-semibold text-truncate" style={{ maxWidth: '140px' }}>
-                    {user?.name || 'My Account'}
-                  </span>
-                  {isAdmin && (
-                    <span className="badge bg-warning text-dark" style={{ fontSize: '0.7rem' }}>
-                      Admin
+                  <i className="bi bi-calendar-check me-1"></i>
+                  <span>My Bookings</span>
+                </Link>
+
+                <div className="dropdown">
+                  <button
+                    className="btn btn-indigo btn-sm d-flex align-items-center gap-2 px-3 py-2 dropdown-toggle"
+                    type="button"
+                    id="userAccountDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i className="bi bi-person-circle"></i>
+                    <span className="text-truncate" style={{ maxWidth: '110px' }}>
+                      {user?.name?.split(' ')[0] || 'Account'}
                     </span>
-                  )}
-                </button>
-                <ul className="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
-                  <li className="px-3 py-2 border-bottom">
-                    <p className="mb-0 fw-bold">{user?.name}</p>
-                    <small className="text-muted">{user?.email}</small>
-                  </li>
-                  <li>
-                    <Link
-                      className="dropdown-item py-2 d-flex align-items-center gap-2"
-                      to="/dashboard"
-                      onClick={() => setIsNavCollapsed(true)}
-                    >
-                      <i className="bi bi-calendar-check text-primary"></i> My Reservations
-                    </Link>
-                  </li>
-                  {isAdmin && (
+                    {isAdmin && (
+                      <span className="badge bg-gold text-dark ms-1" style={{ fontSize: '0.65rem' }}>
+                        Admin
+                      </span>
+                    )}
+                  </button>
+                  <ul className="dropdown-menu dropdown-menu-end shadow-md border-0 p-2 mt-2 rounded-3" aria-labelledby="userAccountDropdown">
+                    <li className="px-3 py-2 border-bottom">
+                      <p className="mb-0 fw-bold text-indigo font-serif small">{user?.name}</p>
+                      <small className="text-muted d-block text-truncate" style={{ maxWidth: '180px' }}>{user?.email}</small>
+                    </li>
                     <li>
                       <Link
-                        className="dropdown-item py-2 d-flex align-items-center gap-2"
-                        to="/admin"
+                        className="dropdown-item py-2 small d-flex align-items-center gap-2 rounded-2"
+                        to="/dashboard"
                         onClick={() => setIsNavCollapsed(true)}
                       >
-                        <i className="bi bi-speedometer2 text-warning"></i> Palace Admin Hub
+                        <i className="bi bi-journal-bookmark text-maroon"></i>
+                        <span>My Reservations</span>
                       </Link>
                     </li>
-                  )}
-                  <li><hr className="dropdown-divider" /></li>
-                  <li>
-                    <button
-                      className="dropdown-item py-2 text-danger d-flex align-items-center gap-2"
-                      onClick={() => {
-                        setIsNavCollapsed(true);
-                        handleLogout();
-                      }}
-                    >
-                      <i className="bi bi-box-arrow-right"></i> Sign Out
-                    </button>
-                  </li>
-                </ul>
+                    {isAdmin && (
+                      <li>
+                        <Link
+                          className="dropdown-item py-2 small d-flex align-items-center gap-2 rounded-2"
+                          to="/admin"
+                          onClick={() => setIsNavCollapsed(true)}
+                        >
+                          <i className="bi bi-speedometer2 text-gold"></i>
+                          <span>Operations Dashboard</span>
+                        </Link>
+                      </li>
+                    )}
+                    <li><hr className="dropdown-divider my-1" /></li>
+                    <li>
+                      <button
+                        className="dropdown-item py-2 small text-danger d-flex align-items-center gap-2 rounded-2"
+                        onClick={() => {
+                          setIsNavCollapsed(true);
+                          handleLogout();
+                        }}
+                      >
+                        <i className="bi bi-box-arrow-right"></i>
+                        <span>Sign Out</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             ) : (
               <div className="d-flex align-items-center gap-2">
                 <Link
-                  to="/login"
-                  className="btn btn-outline-primary px-3 py-2 rounded-3 fw-semibold"
+                  to="/login?redirect=/dashboard"
+                  className="btn btn-outline-indigo btn-sm px-3 py-2"
                   onClick={() => setIsNavCollapsed(true)}
                 >
-                  Sign In
+                  <i className="bi bi-calendar-check me-1"></i>
+                  <span>My Bookings</span>
                 </Link>
                 <Link
-                  to="/register"
-                  className="btn btn-gold px-3 py-2 rounded-3 fw-semibold text-white shadow-sm"
+                  to="/login"
+                  className="btn btn-indigo btn-sm px-3 py-2"
                   onClick={() => setIsNavCollapsed(true)}
                 >
-                  Reserve Stay
+                  <i className="bi bi-person me-1"></i>
+                  <span>Sign In</span>
                 </Link>
               </div>
             )}

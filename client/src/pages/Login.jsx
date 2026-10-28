@@ -28,6 +28,11 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
+    if (!formData.email || !formData.password) {
+      setError('Please provide both your registered email and password.');
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await login(formData);
@@ -40,75 +45,58 @@ const Login = () => {
       }
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.response?.data?.message || 'Invalid email or password. Please try again.');
+      setError(err.response?.data?.message || 'Invalid email or password. Please verify your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Quick Demo account fill for evaluations
-  const fillDemoAccount = (role) => {
-    if (role === 'admin') {
-      setFormData({
-        email: 'admin@hotelpro.com',
-        password: 'AdminPassword123!',
-      });
-    } else {
-      setFormData({
-        email: 'customer@hotelpro.com',
-        password: 'CustomerPassword123!',
-      });
-    }
-  };
-
   return (
-    <div className="py-5 d-flex align-items-center" style={{ minHeight: '75vh' }}>
-      <div className="container" style={{ maxWidth: '480px' }}>
-        <div className="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+    <div className="py-5 d-flex align-items-center" style={{ minHeight: '80vh', backgroundColor: 'var(--color-ivory)' }}>
+      <div className="container" style={{ maxWidth: '460px' }}>
+        <div className="card ornamental-border rounded-3 p-4 p-md-5 shadow-md">
+          {/* Brand & Welcome */}
           <div className="text-center mb-4">
-            <span className="fs-1">🏛️</span>
-            <h2 className="fw-bold font-serif mt-2 mb-1 text-navy">Welcome to HotelPro Palaces</h2>
-            <p className="text-muted small">🙏 Namaste &bull; Sign in to manage your royal reservations</p>
-          </div>
-
-          {error && <AlertMessage variant="danger" message={error} onClose={() => setError('')} />}
-
-          {/* Quick Demo Credential Pills */}
-          <div className="bg-light p-3 rounded-3 mb-4 border">
-            <div className="small fw-bold text-muted mb-2 d-flex align-items-center gap-1">
-              <i className="bi bi-key-fill text-warning"></i> Quick Demo Accounts (Evaluator):
-            </div>
-            <div className="d-flex gap-2">
-              <button
-                type="button"
-                onClick={() => fillDemoAccount('customer')}
-                className="btn btn-outline-primary btn-sm flex-grow-1"
-              >
-                Customer Demo
-              </button>
-              <button
-                type="button"
-                onClick={() => fillDemoAccount('admin')}
-                className="btn btn-outline-warning btn-sm flex-grow-1 text-dark"
-              >
-                Admin Demo
-              </button>
+            <Link to="/" className="text-decoration-none d-inline-block mb-2">
+              <span className="hotelpro-wordmark">
+                HOTEL<span className="accent">PRO</span>
+              </span>
+              <span className="hotelpro-submark">Sanctuary &bull; India</span>
+            </Link>
+            <h2 className="font-serif fw-bold text-indigo mt-3 mb-1" style={{ fontSize: '1.5rem' }}>
+              Welcome to Your Sanctuary
+            </h2>
+            <p className="text-muted small mb-0">
+              Sign in to manage your reservations and guest preferences
+            </p>
+            <div className="jali-divider my-3">
+              <span className="jali-symbol">✦</span>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          {error && (
             <div className="mb-3">
-              <label className="form-label small fw-semibold text-muted">Email Address</label>
+              <AlertMessage variant="danger" message={error} onClose={() => setError('')} />
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="mb-3">
+              <label className="form-label" htmlFor="login-email">
+                Email Address
+              </label>
               <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <i className="bi bi-envelope text-muted"></i>
+                <span className="input-group-text bg-white border-end-0 text-muted" style={{ borderColor: 'rgba(37, 37, 37, 0.16)' }}>
+                  <i className="bi bi-envelope text-gold"></i>
                 </span>
                 <input
+                  id="login-email"
                   type="email"
                   name="email"
                   required
+                  autoComplete="email"
                   placeholder="name@example.com"
-                  className="form-control border-start-0"
+                  className="form-control border-start-0 ps-0"
                   value={formData.email}
                   onChange={handleChange}
                 />
@@ -117,26 +105,30 @@ const Login = () => {
 
             <div className="mb-4">
               <div className="d-flex justify-content-between align-items-center mb-1">
-                <label className="form-label small fw-semibold text-muted mb-0">Password</label>
+                <label className="form-label mb-0" htmlFor="login-password">
+                  Password
+                </label>
                 <button
                   type="button"
-                  className="btn btn-link btn-sm text-decoration-none text-muted p-0"
+                  className="btn btn-link p-0 small text-decoration-none text-muted"
+                  style={{ fontSize: '0.78rem' }}
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'} me-1`}></i>
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
               </div>
               <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <i className="bi bi-lock text-muted"></i>
+                <span className="input-group-text bg-white border-end-0 text-muted" style={{ borderColor: 'rgba(37, 37, 37, 0.16)' }}>
+                  <i className="bi bi-lock text-gold"></i>
                 </span>
                 <input
+                  id="login-password"
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   required
-                  placeholder="••••••••"
-                  className="form-control border-start-0"
+                  autoComplete="current-password"
+                  placeholder="Enter your password"
+                  className="form-control border-start-0 ps-0"
                   value={formData.password}
                   onChange={handleChange}
                 />
@@ -146,25 +138,29 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-navy btn-lg w-100 py-3 fw-bold fs-6 shadow-sm mb-3"
+              className="btn btn-indigo w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm mb-3"
+              style={{ height: '44px' }}
             >
               {loading ? (
                 <>
-                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Signing In...
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span>Verifying Credentials...</span>
                 </>
               ) : (
-                'Sign In'
+                <>
+                  <i className="bi bi-box-arrow-in-right"></i>
+                  <span>Sign In</span>
+                </>
               )}
             </button>
-          </form>
 
-          <div className="text-center mt-3 pt-3 border-top">
-            <span className="text-muted small">Don't have a HotelPro account yet? </span>
-            <Link to="/register" className="fw-semibold text-primary text-decoration-none small">
-              Register here
-            </Link>
-          </div>
+            <div className="text-center pt-2 border-top small" style={{ borderColor: 'rgba(37, 37, 37, 0.08)' }}>
+              <span className="text-muted">New to HotelPro? </span>
+              <Link to="/register" className="fw-semibold text-maroon text-decoration-none">
+                Create a Guest Account
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
     </div>

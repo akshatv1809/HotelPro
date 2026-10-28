@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import * as roomService from '../services/roomService';
 import RoomCard from '../components/rooms/RoomCard';
 import RoomFilter from '../components/rooms/RoomFilter';
@@ -43,7 +43,7 @@ const Rooms = () => {
       }
     } catch (err) {
       console.error('Error fetching rooms:', err);
-      setError(err.response?.data?.message || 'Failed to load rooms. Please try again.');
+      setError(err.response?.data?.message || 'Failed to load accommodations. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -85,83 +85,129 @@ const Rooms = () => {
     fetchRooms(cleared);
   };
 
+  const hasActiveFilters = Boolean(
+    filters.search ||
+    (filters.type && filters.type !== 'All') ||
+    filters.guests ||
+    filters.maxPrice ||
+    filters.checkIn
+  );
+
   return (
-    <div className="py-5">
+    <div className="py-5" style={{ minHeight: '80vh' }}>
       <div className="container">
-        {/* Header */}
+        {/* Header Section */}
         <div className="text-center mb-5">
-          <span className="text-uppercase fw-bold small text-muted" style={{ letterSpacing: '2px' }}>
-            Royal Heritage Accommodations
+          <span className="hero-tag">
+            Artisanal Indian Sanctuaries
           </span>
-          <h1 className="display-5 fw-bold font-serif mt-1">Palaces, Havelis & Suites</h1>
+          <h1 className="display-5 fw-bold font-serif mt-1 text-indigo">
+            Palaces, Havelis & Boutique Stays
+          </h1>
           <p className="text-muted mx-auto" style={{ maxWidth: '680px' }}>
-            Each suite at HotelPro is an enclave of royal serenity, designed with carved teakwood furniture, marble ensuites, and breathtaking lake and courtyard horizons.
+            Every sanctuary is curated for cultural depth, architectural elegance, and modern tranquility — from Mewar lake courtyards to tranquil Kerala backwaters.
           </p>
-          <div className="royal-divider"></div>
+          <div className="jali-divider">
+            <span className="jali-symbol">✦</span>
+          </div>
         </div>
 
-        {/* Date Filter Notification Banner */}
-        {filters.checkIn && filters.checkOut && (
-          <div className="alert alert-info d-flex align-items-center justify-content-between mb-4 rounded-3 shadow-sm border">
-            <div className="d-flex align-items-center gap-2">
-              <i className="bi bi-calendar2-range fs-5 text-primary"></i>
-              <span>
-                Filtering available royal suites for <strong>{filters.checkIn}</strong> to{' '}
-                <strong>{filters.checkOut}</strong>
-              </span>
-            </div>
-            <button
-              className="btn btn-sm btn-outline-secondary"
-              onClick={() => {
-                const updated = { ...filters, checkIn: '', checkOut: '' };
-                setFilters(updated);
-                fetchRooms(updated);
-              }}
-            >
-              Clear Dates
-            </button>
-          </div>
-        )}
-
-        {/* Error Alert */}
-        {error && <AlertMessage variant="danger" message={error} onClose={() => setError('')} />}
-
-        {/* Filter Controls */}
+        {/* Filter Box */}
         <RoomFilter
           filters={filters}
           onFilterChange={handleFilterChange}
           onReset={handleReset}
         />
 
-        {/* Rooms Grid */}
+        {/* Date Filter Alert if set from homepage search */}
+        {filters.checkIn && filters.checkOut && (
+          <div className="alert alert-light border p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center shadow-sm">
+            <div className="d-flex align-items-center gap-2 small">
+              <i className="bi bi-calendar-range text-gold fs-5"></i>
+              <span>
+                Filtering available stays for <strong>{filters.checkIn}</strong> to <strong>{filters.checkOut}</strong>
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                const updated = { ...filters, checkIn: '', checkOut: '' };
+                setFilters(updated);
+                fetchRooms(updated);
+              }}
+              className="btn btn-sm btn-outline-secondary py-1 px-2"
+            >
+              Clear Dates
+            </button>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="mb-4">
+            <AlertMessage
+              variant="danger"
+              message={error}
+              onClose={() => setError('')}
+            />
+            <div className="text-center mt-3">
+              <button onClick={() => fetchRooms(filters)} className="btn btn-outline-indigo btn-sm">
+                <i className="bi bi-arrow-repeat me-1"></i> Retry Loading
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Stays Count Bar */}
+        {!loading && !error && (
+          <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom" style={{ borderColor: 'rgba(197, 164, 109, 0.2)' }}>
+            <span className="small text-muted">
+              Showing <strong className="text-indigo">{rooms.length}</strong> available {rooms.length === 1 ? 'stay' : 'stays'}
+              {hasActiveFilters && ' matching your criteria'}
+            </span>
+            {hasActiveFilters && (
+              <button
+                onClick={handleReset}
+                className="btn btn-link btn-sm text-decoration-none text-maroon p-0"
+              >
+                Clear all filters
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Loading State */}
         {loading ? (
-          <LoadingSpinner text="Searching available palace accommodations..." fullPage />
+          <div className="py-5">
+            <LoadingSpinner text="Presenting our royal accommodations..." />
+          </div>
         ) : rooms.length === 0 ? (
-          <div className="text-center py-5 bg-white rounded-4 shadow-sm p-5 border">
-            <i className="bi bi-search fs-1 text-muted mb-3 d-block"></i>
-            <h4 className="fw-bold font-serif mb-2">No Accommodations Found</h4>
-            <p className="text-muted mb-4">
-              We couldn't find any suites matching your exact filter preferences or dates.
+          /* Empty State */
+          <div className="text-center py-5 my-4 bg-white rounded-3 p-5 shadow-sm ornamental-border">
+            <div
+              className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+              style={{ width: '64px', height: '64px', background: 'var(--color-gold-light)', color: 'var(--color-maroon)' }}
+            >
+              <i className="bi bi-search fs-3"></i>
+            </div>
+            <h4 className="font-serif fw-bold text-indigo mb-2">No Stays Match Your Search</h4>
+            <p className="text-muted mx-auto mb-4" style={{ maxWidth: '440px' }}>
+              We could not find accommodations matching your exact dates or filters. Try adjusting your guest count or resetting the tariff range.
             </p>
-            <button onClick={handleReset} className="btn btn-navy px-4 py-2">
-              Reset Filters & Show All Suites
+            <button
+              onClick={handleReset}
+              className="btn btn-indigo px-4 py-2"
+            >
+              <i className="bi bi-arrow-counterclockwise me-1"></i> Reset All Filters
             </button>
           </div>
         ) : (
-          <div>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <span className="text-muted small fw-semibold">
-                Showing <strong>{rooms.length}</strong> available royal suite{rooms.length > 1 ? 's' : ''}
-              </span>
-            </div>
-
-            <div className="row g-4">
-              {rooms.map((room) => (
-                <div key={room._id} className="col-lg-4 col-md-6">
-                  <RoomCard room={room} />
-                </div>
-              ))}
-            </div>
+          /* Stays Grid */
+          <div className="row g-4">
+            {rooms.map((room) => (
+              <div key={room._id} className="col-lg-4 col-md-6">
+                <RoomCard room={room} />
+              </div>
+            ))}
           </div>
         )}
       </div>

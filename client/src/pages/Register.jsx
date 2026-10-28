@@ -27,13 +27,18 @@ const Register = () => {
     e.preventDefault();
     setError('');
 
+    if (!formData.name || !formData.email || !formData.password) {
+      setError('Please provide your name, email address, and password.');
+      return;
+    }
+
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError('Password must contain at least 6 characters.');
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError('Passwords do not match. Please verify your entry.');
       return;
     }
 
@@ -52,7 +57,7 @@ const Register = () => {
     } catch (err) {
       console.error('Registration error:', err);
       setError(
-        err.response?.data?.message || 'Failed to create account. Please try again.'
+        err.response?.data?.message || 'Unable to create guest account. Please try again.'
       );
     } finally {
       setLoading(false);
@@ -60,32 +65,51 @@ const Register = () => {
   };
 
   return (
-    <div className="py-5 d-flex align-items-center" style={{ minHeight: '80vh' }}>
-      <div className="container" style={{ maxWidth: '520px' }}>
-        <div className="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+    <div className="py-5 d-flex align-items-center" style={{ minHeight: '80vh', backgroundColor: 'var(--color-ivory)' }}>
+      <div className="container" style={{ maxWidth: '500px' }}>
+        <div className="card ornamental-border rounded-3 p-4 p-md-5 shadow-md">
+          {/* Brand & Welcome */}
           <div className="text-center mb-4">
-            <span className="fs-1">🏛️</span>
-            <h2 className="fw-bold font-serif mt-2 mb-1 text-navy">Join HotelPro Royal Circle</h2>
-            <p className="text-muted small">
-              Create an account for guaranteed luxury room rates & direct reservations
+            <Link to="/" className="text-decoration-none d-inline-block mb-2">
+              <span className="hotelpro-wordmark">
+                HOTEL<span className="accent">PRO</span>
+              </span>
+              <span className="hotelpro-submark">Sanctuary &bull; India</span>
+            </Link>
+            <h2 className="font-serif fw-bold text-indigo mt-3 mb-1" style={{ fontSize: '1.5rem' }}>
+              Create Your Guest Profile
+            </h2>
+            <p className="text-muted small mb-0">
+              Join HotelPro for curated reservations, direct tariffs, and mindful stays
             </p>
+            <div className="jali-divider my-3">
+              <span className="jali-symbol">✦</span>
+            </div>
           </div>
 
-          {error && <AlertMessage variant="danger" message={error} onClose={() => setError('')} />}
-
-          <form onSubmit={handleSubmit}>
+          {error && (
             <div className="mb-3">
-              <label className="form-label small fw-semibold text-muted">Full Name *</label>
+              <AlertMessage variant="danger" message={error} onClose={() => setError('')} />
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="mb-3">
+              <label className="form-label" htmlFor="reg-name">
+                Full Name
+              </label>
               <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <i className="bi bi-person text-muted"></i>
+                <span className="input-group-text bg-white border-end-0 text-muted" style={{ borderColor: 'rgba(37, 37, 37, 0.16)' }}>
+                  <i className="bi bi-person text-gold"></i>
                 </span>
                 <input
+                  id="reg-name"
                   type="text"
                   name="name"
                   required
-                  placeholder="e.g. Katherine Sterling"
-                  className="form-control border-start-0"
+                  autoComplete="name"
+                  placeholder="e.g. Arjun Patel"
+                  className="form-control border-start-0 ps-0"
                   value={formData.name}
                   onChange={handleChange}
                 />
@@ -93,17 +117,21 @@ const Register = () => {
             </div>
 
             <div className="mb-3">
-              <label className="form-label small fw-semibold text-muted">Email Address *</label>
+              <label className="form-label" htmlFor="reg-email">
+                Email Address
+              </label>
               <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <i className="bi bi-envelope text-muted"></i>
+                <span className="input-group-text bg-white border-end-0 text-muted" style={{ borderColor: 'rgba(37, 37, 37, 0.16)' }}>
+                  <i className="bi bi-envelope text-gold"></i>
                 </span>
                 <input
+                  id="reg-email"
                   type="email"
                   name="email"
                   required
-                  placeholder="katherine@example.com"
-                  className="form-control border-start-0"
+                  autoComplete="email"
+                  placeholder="name@example.com"
+                  className="form-control border-start-0 ps-0"
                   value={formData.email}
                   onChange={handleChange}
                 />
@@ -111,90 +139,110 @@ const Register = () => {
             </div>
 
             <div className="mb-3">
-              <label className="form-label small fw-semibold text-muted">Phone Number (Optional)</label>
+              <label className="form-label" htmlFor="reg-phone">
+                Phone Number <span className="text-muted fw-normal">(Optional)</span>
+              </label>
               <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <i className="bi bi-telephone text-muted"></i>
+                <span className="input-group-text bg-white border-end-0 text-muted" style={{ borderColor: 'rgba(37, 37, 37, 0.16)' }}>
+                  <i className="bi bi-telephone text-gold"></i>
                 </span>
                 <input
+                  id="reg-phone"
                   type="tel"
                   name="phone"
+                  autoComplete="tel"
                   placeholder="+91 98765 43210"
-                  className="form-control border-start-0"
+                  className="form-control border-start-0 ps-0"
                   value={formData.phone}
                   onChange={handleChange}
                 />
               </div>
             </div>
 
-            <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-1">
-                <label className="form-label small fw-semibold text-muted mb-0">Password *</label>
-                <button
-                  type="button"
-                  className="btn btn-link btn-sm text-decoration-none text-muted p-0"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'} me-1`}></i>
-                  {showPassword ? 'Hide' : 'Show'}
-                </button>
+            <div className="row g-2 mb-4">
+              <div className="col-sm-6">
+                <label className="form-label" htmlFor="reg-password">
+                  Password
+                </label>
+                <div className="input-group">
+                  <span className="input-group-text bg-white border-end-0 text-muted" style={{ borderColor: 'rgba(37, 37, 37, 0.16)' }}>
+                    <i className="bi bi-lock text-gold"></i>
+                  </span>
+                  <input
+                    id="reg-password"
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    required
+                    placeholder="Min 6 characters"
+                    className="form-control border-start-0 ps-0"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-              <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <i className="bi bi-lock text-muted"></i>
-                </span>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  required
-                  placeholder="At least 6 characters"
-                  className="form-control border-start-0"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
+
+              <div className="col-sm-6">
+                <label className="form-label" htmlFor="reg-confirmPassword">
+                  Confirm Password
+                </label>
+                <div className="input-group">
+                  <span className="input-group-text bg-white border-end-0 text-muted" style={{ borderColor: 'rgba(37, 37, 37, 0.16)' }}>
+                    <i className="bi bi-shield-lock text-gold"></i>
+                  </span>
+                  <input
+                    id="reg-confirmPassword"
+                    type={showPassword ? 'text' : 'password'}
+                    name="confirmPassword"
+                    required
+                    placeholder="Repeat password"
+                    className="form-control border-start-0 ps-0"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="mb-4">
-              <label className="form-label small fw-semibold text-muted">Confirm Password *</label>
-              <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <i className="bi bi-lock-fill text-muted"></i>
-                </span>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="confirmPassword"
-                  required
-                  placeholder="Re-enter password"
-                  className="form-control border-start-0"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-              </div>
+            <div className="form-check mb-4 small text-muted">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="togglePassVisibility"
+                checked={showPassword}
+                onChange={() => setShowPassword(!showPassword)}
+                style={{ accentColor: 'var(--color-gold)' }}
+              />
+              <label className="form-check-label" htmlFor="togglePassVisibility">
+                Show passwords
+              </label>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-gold btn-lg w-100 py-3 fw-bold fs-6 shadow-sm mb-3"
+              className="btn btn-indigo w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm mb-3"
+              style={{ height: '44px' }}
             >
               {loading ? (
                 <>
-                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Creating Account...
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span>Creating Profile...</span>
                 </>
               ) : (
-                'Create HotelPro Account'
+                <>
+                  <i className="bi bi-person-check"></i>
+                  <span>Create Account</span>
+                </>
               )}
             </button>
-          </form>
 
-          <div className="text-center mt-3 pt-3 border-top">
-            <span className="text-muted small">Already a registered guest? </span>
-            <Link to="/login" className="fw-semibold text-primary text-decoration-none small">
-              Sign In here
-            </Link>
-          </div>
+            <div className="text-center pt-2 border-top small" style={{ borderColor: 'rgba(37, 37, 37, 0.08)' }}>
+              <span className="text-muted">Already registered? </span>
+              <Link to="/login" className="fw-semibold text-maroon text-decoration-none">
+                Sign In to Your Account
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
     </div>

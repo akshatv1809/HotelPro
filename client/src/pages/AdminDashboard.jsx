@@ -27,12 +27,12 @@ const AdminDashboard = () => {
     description: '',
     pricePerNight: '',
     capacity: 2,
-    bedType: '1 King Bed',
+    bedType: '1 Royal King Bed',
     roomSize: 45,
     status: 'Available',
     featured: false,
     images: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80',
-    amenities: 'High-speed Wi-Fi, Air Conditioning, Flat-screen TV, Ensuite Bathroom, Ocean Balcony',
+    amenities: 'High-speed Wi-Fi, Air Conditioning, Flat-screen TV, Ensuite Bathroom, Courtyard View',
   });
 
   // Booking Filter State
@@ -83,12 +83,12 @@ const AdminDashboard = () => {
       description: 'Experience utmost luxury and modern comfort.',
       pricePerNight: '7500',
       capacity: 2,
-      bedType: '1 King Bed',
+      bedType: '1 Royal King Bed',
       roomSize: 45,
       status: 'Available',
       featured: false,
       images: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80',
-      amenities: 'High-speed Wi-Fi, Air Conditioning, Flat-screen TV, Ensuite Bathroom, Ocean Balcony',
+      amenities: 'High-speed Wi-Fi, Air Conditioning, Flat-screen TV, Ensuite Bathroom, Courtyard View',
     });
     setShowRoomModal(true);
   };
@@ -101,9 +101,9 @@ const AdminDashboard = () => {
       title: room.title,
       type: room.type,
       description: room.description,
-      pricePerNight: room.pricePerNight.toString(),
+      pricePerNight: room.pricePerNight,
       capacity: room.capacity,
-      bedType: room.bedType || '1 King Bed',
+      bedType: room.bedType || '1 Royal King Bed',
       roomSize: room.roomSize || 45,
       status: room.status,
       featured: !!room.featured,
@@ -117,15 +117,6 @@ const AdminDashboard = () => {
     e.preventDefault();
     try {
       setActionLoading(true);
-      const imagesArray = roomForm.images
-        .split(',')
-        .map((img) => img.trim())
-        .filter(Boolean);
-      const amenitiesArray = roomForm.amenities
-        .split(',')
-        .map((a) => a.trim())
-        .filter(Boolean);
-
       const payload = {
         roomNumber: roomForm.roomNumber.trim().toUpperCase(),
         title: roomForm.title.trim(),
@@ -137,8 +128,14 @@ const AdminDashboard = () => {
         roomSize: Number(roomForm.roomSize),
         status: roomForm.status,
         featured: roomForm.featured,
-        images: imagesArray.length > 0 ? imagesArray : ['https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80'],
-        amenities: amenitiesArray.length > 0 ? amenitiesArray : ['High-speed Wi-Fi'],
+        images: roomForm.images
+          .split(',')
+          .map((url) => url.trim())
+          .filter(Boolean),
+        amenities: roomForm.amenities
+          .split(',')
+          .map((a) => a.trim())
+          .filter(Boolean),
       };
 
       if (isEditingRoom) {
@@ -253,7 +250,7 @@ const AdminDashboard = () => {
 
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';
-    return new Date(dateStr).toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString('en-IN', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -276,79 +273,86 @@ const AdminDashboard = () => {
     <div className="container-fluid p-0">
       <div className="row g-0">
         {/* Admin Sidebar Navigation */}
-        <div className="col-lg-2 col-md-3 admin-sidebar p-3 d-flex flex-column">
-          <div className="px-3 py-3 border-bottom border-secondary border-opacity-25 mb-3">
-            <span className="badge bg-warning text-dark mb-1">Admin Panel</span>
-            <h5 className="font-serif fw-bold text-white mb-0">HotelPro Ops</h5>
+        <div className="col-lg-2 col-md-3 dashboard-sidebar p-3 d-flex flex-column">
+          <div className="px-3 py-3 border-bottom mb-3" style={{ borderColor: 'rgba(197, 164, 109, 0.25)' }}>
+            <span className="badge-status badge-status-pending mb-1" style={{ fontSize: '0.65rem' }}>
+              Operations Hub
+            </span>
+            <div className="hotelpro-wordmark mt-1" style={{ color: '#FFFFFF', fontSize: '1.25rem' }}>
+              HOTEL<span className="accent">PRO</span>
+            </div>
+            <small style={{ color: 'var(--color-gold-muted)', fontSize: '0.65rem', letterSpacing: '1.5px', textTransform: 'uppercase', display: 'block' }}>
+              Palace Administration
+            </small>
           </div>
 
           <nav className="nav flex-column gap-1 flex-grow-1">
             <button
-              className={`btn admin-nav-link text-start w-100 ${
+              className={`btn dashboard-nav-item text-start w-100 ${
                 activeTab === 'overview' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('overview')}
             >
-              <i className="bi bi-speedometer2 fs-5"></i>
-              <span>Dashboard Overview</span>
+              <i className="bi bi-speedometer2 text-gold"></i>
+              <span>Overview & Analytics</span>
             </button>
 
             <button
-              className={`btn admin-nav-link text-start w-100 ${
+              className={`btn dashboard-nav-item text-start w-100 ${
                 activeTab === 'rooms' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('rooms')}
             >
-              <i className="bi bi-door-open fs-5"></i>
-              <span>Rooms Management ({rooms.length})</span>
+              <i className="bi bi-door-open text-gold"></i>
+              <span>Room Inventory ({rooms.length})</span>
             </button>
 
             <button
-              className={`btn admin-nav-link text-start w-100 ${
+              className={`btn dashboard-nav-item text-start w-100 ${
                 activeTab === 'bookings' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('bookings')}
             >
-              <i className="bi bi-calendar2-range fs-5"></i>
+              <i className="bi bi-calendar2-range text-gold"></i>
               <span>Bookings ({bookings.length})</span>
             </button>
 
             <button
-              className={`btn admin-nav-link text-start w-100 ${
+              className={`btn dashboard-nav-item text-start w-100 ${
                 activeTab === 'users' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('users')}
             >
-              <i className="bi bi-people fs-5"></i>
-              <span>Guest Directory ({users.length})</span>
+              <i className="bi bi-people text-gold"></i>
+              <span>Guest Records ({users.length})</span>
             </button>
           </nav>
 
-          <div className="p-3 border-top border-secondary border-opacity-25 text-white-50 small">
-            <div>HotelPro PMS v1.0</div>
-            <small>Connected: Local MongoDB</small>
+          <div className="p-3 border-top small" style={{ borderColor: 'rgba(197, 164, 109, 0.2)', color: 'rgba(247, 242, 232, 0.6)' }}>
+            <div>HotelPro Operations v1.0</div>
+            <small>Database: MongoDB Connected</small>
           </div>
         </div>
 
         {/* Main Content Area */}
-        <div className="col-lg-10 col-md-9 p-4 bg-light min-vh-100">
+        <div className="col-lg-10 col-md-9 p-4 min-vh-100" style={{ backgroundColor: 'var(--color-ivory)' }}>
           {/* Top Header */}
-          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3 bg-white p-3 rounded-4 shadow-sm border">
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3 bg-white p-3 rounded-3 shadow-sm border" style={{ borderColor: 'rgba(197, 164, 109, 0.25)' }}>
             <div>
-              <h3 className="fw-bold font-serif mb-0 text-navy">
-                {activeTab === 'overview' && 'Management Overview & Analytics'}
-                {activeTab === 'rooms' && 'Suite & Room Inventory'}
-                {activeTab === 'bookings' && 'Reservations & Front Desk'}
+              <h3 className="fw-bold font-serif mb-0 text-indigo" style={{ fontSize: '1.4rem' }}>
+                {activeTab === 'overview' && 'Executive Analytics & Revenue Overview'}
+                {activeTab === 'rooms' && 'Sanctuary Inventory & Suite Management'}
+                {activeTab === 'bookings' && 'Guest Reservations & Front Desk Controls'}
                 {activeTab === 'users' && 'Registered Guests & Staff Directory'}
               </h3>
-              <small className="text-muted">Real-time HotelPro administrative controls</small>
+              <small className="text-muted">Real-time hospitality management data from server</small>
             </div>
 
             <div className="d-flex align-items-center gap-2">
               <button
                 onClick={loadDashboardData}
                 disabled={loading}
-                className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
+                className="btn btn-outline-indigo btn-sm d-flex align-items-center gap-1"
                 title="Refresh records"
               >
                 <i className="bi bi-arrow-clockwise"></i> Refresh
@@ -358,7 +362,7 @@ const AdminDashboard = () => {
                   onClick={handleOpenAddRoom}
                   className="btn btn-gold btn-sm d-flex align-items-center gap-1 shadow-sm"
                 >
-                  <i className="bi bi-plus-lg"></i> Add New Room
+                  <i className="bi bi-plus-lg"></i> Add New Suite
                 </button>
               )}
             </div>
@@ -366,15 +370,19 @@ const AdminDashboard = () => {
 
           {/* Feedback banner */}
           {feedback.message && (
-            <AlertMessage
-              variant={feedback.variant}
-              message={feedback.message}
-              onClose={() => setFeedback({ variant: '', message: '' })}
-            />
+            <div className="mb-4">
+              <AlertMessage
+                variant={feedback.variant}
+                message={feedback.message}
+                onClose={() => setFeedback({ variant: '', message: '' })}
+              />
+            </div>
           )}
 
           {loading ? (
-            <LoadingSpinner text="Retrieving administrative data..." fullPage />
+            <div className="py-5">
+              <LoadingSpinner text="Retrieving administrative data..." fullPage />
+            </div>
           ) : (
             <>
               {/* TAB 1: OVERVIEW */}
@@ -384,42 +392,50 @@ const AdminDashboard = () => {
                   <div className="row g-3 mb-4">
                     {/* Total Revenue */}
                     <div className="col-xl-3 col-sm-6">
-                      <div className="card border-0 rounded-4 p-4 shadow-sm bg-white h-100">
+                      <div className="stat-card-luxury h-100">
                         <div className="d-flex justify-content-between align-items-start">
                           <div>
-                            <span className="text-muted small fw-semibold text-uppercase">
-                              Booking Revenue
+                            <span className="text-muted small fw-semibold text-uppercase" style={{ letterSpacing: '0.5px' }}>
+                              Total Booking Revenue
                             </span>
-                            <h3 className="fw-bold font-serif text-navy mt-2 mb-0">
+                            <h3 className="fw-bold font-serif text-indigo mt-2 mb-0">
                               ₹{Number(stats?.totalRevenue || 0).toLocaleString('en-IN')}
                             </h3>
                           </div>
-                          <div className="badge bg-success p-3 rounded-circle">
-                            <i className="bi bi-cash-stack fs-4 text-white"></i>
+                          <div
+                            className="rounded-circle d-flex align-items-center justify-content-center"
+                            style={{ width: '48px', height: '48px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+                          >
+                            <i className="bi bi-cash-stack fs-4"></i>
                           </div>
                         </div>
-                        <small className="text-muted mt-3 d-block">Confirmed & Completed stays</small>
+                        <small className="text-muted mt-3 d-block" style={{ fontSize: '0.75rem' }}>
+                          Real confirmed & completed booking revenue
+                        </small>
                       </div>
                     </div>
 
                     {/* Total Rooms */}
                     <div className="col-xl-3 col-sm-6">
-                      <div className="card border-0 rounded-4 p-4 shadow-sm bg-white h-100">
+                      <div className="stat-card-luxury h-100">
                         <div className="d-flex justify-content-between align-items-start">
                           <div>
-                            <span className="text-muted small fw-semibold text-uppercase">
-                              Total Rooms
+                            <span className="text-muted small fw-semibold text-uppercase" style={{ letterSpacing: '0.5px' }}>
+                              Room Inventory
                             </span>
-                            <h3 className="fw-bold font-serif text-navy mt-2 mb-0">
+                            <h3 className="fw-bold font-serif text-indigo mt-2 mb-0">
                               {stats?.totalRooms || 0}
                             </h3>
                           </div>
-                          <div className="badge bg-primary p-3 rounded-circle">
-                            <i className="bi bi-door-open fs-4 text-white"></i>
+                          <div
+                            className="rounded-circle d-flex align-items-center justify-content-center"
+                            style={{ width: '48px', height: '48px', background: 'var(--color-ivory)', color: 'var(--color-indigo)' }}
+                          >
+                            <i className="bi bi-door-open fs-4"></i>
                           </div>
                         </div>
-                        <div className="d-flex gap-2 mt-3 small text-muted">
-                          <span className="text-success fw-bold">{stats?.availableRooms || 0} Avail</span>
+                        <div className="d-flex gap-2 mt-3 small text-muted" style={{ fontSize: '0.75rem' }}>
+                          <span className="text-success fw-bold">{stats?.availableRooms || 0} Available</span>
                           <span>&bull;</span>
                           <span className="text-warning fw-bold">{stats?.maintenanceRooms || 0} Maint</span>
                         </div>
@@ -428,21 +444,24 @@ const AdminDashboard = () => {
 
                     {/* Total Bookings */}
                     <div className="col-xl-3 col-sm-6">
-                      <div className="card border-0 rounded-4 p-4 shadow-sm bg-white h-100">
+                      <div className="stat-card-luxury h-100">
                         <div className="d-flex justify-content-between align-items-start">
                           <div>
-                            <span className="text-muted small fw-semibold text-uppercase">
+                            <span className="text-muted small fw-semibold text-uppercase" style={{ letterSpacing: '0.5px' }}>
                               Total Bookings
                             </span>
-                            <h3 className="fw-bold font-serif text-navy mt-2 mb-0">
+                            <h3 className="fw-bold font-serif text-indigo mt-2 mb-0">
                               {stats?.totalBookings || 0}
                             </h3>
                           </div>
-                          <div className="badge bg-warning p-3 rounded-circle">
-                            <i className="bi bi-calendar-check fs-4 text-dark"></i>
+                          <div
+                            className="rounded-circle d-flex align-items-center justify-content-center"
+                            style={{ width: '48px', height: '48px', background: 'var(--color-ivory)', color: 'var(--color-maroon)' }}
+                          >
+                            <i className="bi bi-calendar-check fs-4"></i>
                           </div>
                         </div>
-                        <div className="d-flex gap-2 mt-3 small text-muted">
+                        <div className="d-flex gap-2 mt-3 small text-muted" style={{ fontSize: '0.75rem' }}>
                           <span className="text-success fw-bold">{stats?.confirmedBookings || 0} Confirmed</span>
                           <span>&bull;</span>
                           <span className="text-danger fw-bold">{stats?.cancelledBookings || 0} Cancelled</span>
@@ -450,134 +469,151 @@ const AdminDashboard = () => {
                       </div>
                     </div>
 
-                    {/* Registered Guests */}
+                    {/* Estimated Occupancy */}
                     <div className="col-xl-3 col-sm-6">
-                      <div className="card border-0 rounded-4 p-4 shadow-sm bg-white h-100">
+                      <div className="stat-card-luxury h-100">
                         <div className="d-flex justify-content-between align-items-start">
                           <div>
-                            <span className="text-muted small fw-semibold text-uppercase">
-                              Registered Users
+                            <span className="text-muted small fw-semibold text-uppercase" style={{ letterSpacing: '0.5px' }}>
+                              Live Occupancy Rate
                             </span>
-                            <h3 className="fw-bold font-serif text-navy mt-2 mb-0">
-                              {stats?.totalUsers || 0}
+                            <h3 className="fw-bold font-serif text-indigo mt-2 mb-0">
+                              {stats?.occupancyRate || 0}%
                             </h3>
                           </div>
-                          <div className="badge bg-info p-3 rounded-circle">
-                            <i className="bi bi-people fs-4 text-white"></i>
+                          <div
+                            className="rounded-circle d-flex align-items-center justify-content-center"
+                            style={{ width: '48px', height: '48px', background: 'var(--color-ivory)', color: 'var(--color-gold)' }}
+                          >
+                            <i className="bi bi-pie-chart fs-4"></i>
                           </div>
                         </div>
-                        <small className="text-muted mt-3 d-block">
-                          Estimated Occupancy: <strong>{stats?.occupancyRate || 0}%</strong>
-                        </small>
+                        <div className="progress mt-3" style={{ height: '6px' }}>
+                          <div
+                            className="progress-bar"
+                            style={{ width: `${stats?.occupancyRate || 0}%`, backgroundColor: 'var(--color-gold)' }}
+                          ></div>
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Recent Bookings Table */}
-                  <div className="card border-0 rounded-4 shadow-sm bg-white p-4">
+                  <div className="card ornamental-border rounded-3 shadow-sm bg-white p-4 mb-4">
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                      <h5 className="fw-bold font-serif mb-0 text-navy">Recent Guest Bookings</h5>
+                      <div>
+                        <h5 className="font-serif fw-bold text-indigo mb-0">Recent Guest Reservations</h5>
+                        <small className="text-muted">Most recent reservation records created in the system</small>
+                      </div>
                       <button
                         onClick={() => setActiveTab('bookings')}
-                        className="btn btn-sm btn-link text-decoration-none"
+                        className="btn btn-outline-indigo btn-sm"
                       >
                         View All Bookings &rarr;
                       </button>
                     </div>
 
-                    <div className="table-responsive">
-                      <table className="table table-hover hotel-table align-middle">
-                        <thead>
-                          <tr>
-                            <th>Guest</th>
-                            <th>Suite</th>
-                            <th>Check-In &bull; Out</th>
-                            <th>Total Rate</th>
-                            <th>Status</th>
-                            <th>Payment</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {recentBookings.map((b) => (
-                            <tr key={b._id}>
-                              <td>
-                                <strong className="text-dark">{b.user?.name || 'Guest'}</strong>
-                                <small className="text-muted d-block">{b.user?.email}</small>
-                              </td>
-                              <td>
-                                <div>Room #{b.room?.roomNumber}</div>
-                                <small className="text-muted">{b.room?.title}</small>
-                              </td>
-                              <td>
-                                <small className="fw-semibold">
-                                  {formatDate(b.checkIn)} &rarr; {formatDate(b.checkOut)}
-                                </small>
-                                <small className="d-block text-muted">{b.nights} night(s)</small>
-                              </td>
-                              <td>
-                                <span className="fw-bold font-serif text-navy">₹{Number(b.totalPrice || 0).toLocaleString('en-IN')}</span>
-                              </td>
-                              <td>
-                                <span
-                                  className={`badge ${
-                                    b.bookingStatus === 'Confirmed'
-                                      ? 'bg-success'
-                                      : b.bookingStatus === 'Cancelled'
-                                      ? 'bg-danger'
-                                      : 'bg-warning text-dark'
-                                  }`}
-                                >
-                                  {b.bookingStatus}
-                                </span>
-                              </td>
-                              <td>
-                                <span
-                                  className={`badge ${
-                                    b.paymentStatus === 'Paid'
-                                      ? 'bg-success'
-                                      : b.paymentStatus === 'Refunded'
-                                      ? 'bg-secondary'
-                                      : 'bg-light text-dark border'
-                                  }`}
-                                >
-                                  {b.paymentStatus}
-                                </span>
-                              </td>
+                    {recentBookings.length === 0 ? (
+                      <p className="text-muted small my-3">No reservation records currently on file.</p>
+                    ) : (
+                      <div className="table-responsive">
+                        <table className="table table-luxury align-middle">
+                          <thead>
+                            <tr>
+                              <th>Ref Code</th>
+                              <th>Guest Name</th>
+                              <th>Suite</th>
+                              <th>Dates</th>
+                              <th>Total Tariff</th>
+                              <th>Status</th>
+                              <th>Action</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                          </thead>
+                          <tbody>
+                            {recentBookings.map((b) => (
+                              <tr key={b._id}>
+                                <td className="font-monospace small fw-bold text-charcoal">
+                                  HP-{b._id?.toString().slice(-6).toUpperCase()}
+                                </td>
+                                <td>
+                                  <div className="fw-semibold text-indigo">{b.user?.name || 'Guest'}</div>
+                                  <small className="text-muted">{b.user?.email}</small>
+                                </td>
+                                <td>
+                                  <div className="small fw-semibold">{b.room?.title}</div>
+                                  <small className="text-muted">Suite #{b.room?.roomNumber}</small>
+                                </td>
+                                <td className="small">
+                                  {formatDate(b.checkIn)} &rarr; {formatDate(b.checkOut)}
+                                </td>
+                                <td className="fw-bold font-serif text-indigo">
+                                  ₹{Number(b.totalPrice || 0).toLocaleString('en-IN')}
+                                </td>
+                                <td>
+                                  <span
+                                    className={`badge-status ${
+                                      b.bookingStatus === 'Confirmed'
+                                        ? 'badge-status-confirmed'
+                                        : b.bookingStatus === 'Cancelled'
+                                        ? 'badge-status-cancelled'
+                                        : 'badge-status-pending'
+                                    }`}
+                                  >
+                                    {b.bookingStatus}
+                                  </span>
+                                </td>
+                                <td>
+                                  <button
+                                    onClick={() => setActiveTab('bookings')}
+                                    className="btn btn-outline-indigo btn-sm py-0 px-2"
+                                    style={{ fontSize: '0.78rem' }}
+                                  >
+                                    Manage
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
 
-              {/* TAB 2: ROOMS MANAGEMENT */}
+              {/* TAB 2: ROOM INVENTORY */}
               {activeTab === 'rooms' && (
-                <div className="card border-0 rounded-4 shadow-sm bg-white p-4">
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h5 className="fw-bold font-serif mb-0 text-navy">All Room Inventory ({rooms.length})</h5>
-                    <button onClick={handleOpenAddRoom} className="btn btn-gold btn-sm shadow-sm">
+                <div className="card ornamental-border rounded-3 shadow-sm bg-white p-4">
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <h5 className="font-serif fw-bold text-indigo mb-0">Suite & Room Inventory</h5>
+                      <small className="text-muted">Total inventory: {rooms.length} suites across India</small>
+                    </div>
+                    <button onClick={handleOpenAddRoom} className="btn btn-gold btn-sm">
                       <i className="bi bi-plus-lg me-1"></i> Add Room
                     </button>
                   </div>
 
                   <div className="table-responsive">
-                    <table className="table table-hover hotel-table align-middle">
+                    <table className="table table-luxury align-middle">
                       <thead>
                         <tr>
-                          <th>Room</th>
-                          <th>Title & Description</th>
-                          <th>Type</th>
+                          <th>Room #</th>
+                          <th>Suite Details</th>
+                          <th>Category</th>
                           <th>Capacity</th>
-                          <th>Rate / Night</th>
+                          <th>Nightly Tariff</th>
                           <th>Status</th>
+                          <th>Featured</th>
                           <th className="text-end">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {rooms.map((room) => (
                           <tr key={room._id}>
+                            <td className="fw-bold font-monospace text-indigo">
+                              #{room.roomNumber}
+                            </td>
                             <td>
                               <div className="d-flex align-items-center gap-2">
                                 <img
@@ -586,54 +622,59 @@ const AdminDashboard = () => {
                                     'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80'
                                   }
                                   alt={room.title}
-                                  className="rounded-3 object-fit-cover shadow-sm"
-                                  style={{ width: '60px', height: '48px' }}
+                                  className="rounded-2 object-fit-cover shadow-sm"
+                                  style={{ width: '48px', height: '40px', background: 'var(--color-indigo)' }}
                                 />
-                                <strong className="font-monospace text-primary">#{room.roomNumber}</strong>
+                                <div>
+                                  <div className="fw-semibold text-charcoal small">{room.title}</div>
+                                  <small className="text-muted">{room.bedType || 'King Bed'} &bull; {room.roomSize || 45} m²</small>
+                                </div>
                               </div>
                             </td>
                             <td>
-                              <div className="fw-bold text-dark">{room.title}</div>
-                              <small className="text-muted text-truncate d-inline-block" style={{ maxWidth: '240px' }}>
-                                {room.description}
-                              </small>
+                              <span className="badge-status badge-status-available" style={{ fontSize: '0.72rem' }}>
+                                {room.type}
+                              </span>
                             </td>
-                            <td>
-                              <span className="badge badge-gold">{room.type}</span>
-                            </td>
-                            <td>
-                              <small className="fw-semibold">{room.capacity} Guests</small>
-                              <small className="text-muted d-block">{room.bedType}</small>
-                            </td>
-                            <td>
-                              <strong className="text-navy font-serif fs-6">₹{Number(room.pricePerNight || 0).toLocaleString('en-IN')}</strong>
+                            <td className="small">{room.capacity} Guests</td>
+                            <td className="fw-bold font-serif text-indigo">
+                              ₹{Number(room.pricePerNight).toLocaleString('en-IN')}
                             </td>
                             <td>
                               <span
-                                className={`badge ${
+                                className={`badge-status ${
                                   room.status === 'Available'
-                                    ? 'bg-success'
-                                    : room.status === 'Maintenance'
-                                    ? 'bg-warning text-dark'
-                                    : 'bg-secondary'
+                                    ? 'badge-status-available'
+                                    : room.status === 'Booked'
+                                    ? 'badge-status-booked'
+                                    : 'badge-status-maintenance'
                                 }`}
                               >
                                 {room.status}
                               </span>
                             </td>
+                            <td>
+                              {room.featured ? (
+                                <i className="bi bi-star-fill text-gold" title="Featured on Homepage"></i>
+                              ) : (
+                                <span className="text-muted small">-</span>
+                              )}
+                            </td>
                             <td className="text-end">
                               <div className="d-flex justify-content-end gap-1">
                                 <button
                                   onClick={() => handleOpenEditRoom(room)}
-                                  className="btn btn-sm btn-outline-secondary"
-                                  title="Edit Room"
+                                  className="btn btn-sm btn-outline-indigo py-1 px-2"
+                                  title="Edit Suite"
+                                  style={{ fontSize: '0.8rem' }}
                                 >
                                   <i className="bi bi-pencil"></i>
                                 </button>
                                 <button
                                   onClick={() => handleDeleteRoom(room._id, room.roomNumber)}
-                                  className="btn btn-sm btn-outline-danger"
-                                  title="Delete Room"
+                                  className="btn btn-sm btn-outline-danger py-1 px-2"
+                                  title="Delete Suite"
+                                  style={{ fontSize: '0.8rem' }}
                                 >
                                   <i className="bi bi-trash"></i>
                                 </button>
@@ -649,177 +690,197 @@ const AdminDashboard = () => {
 
               {/* TAB 3: BOOKINGS MANAGEMENT */}
               {activeTab === 'bookings' && (
-                <div className="card border-0 rounded-4 shadow-sm bg-white p-4">
-                  {/* Filters Bar */}
-                  <div className="row g-3 mb-4 align-items-center">
-                    <div className="col-md-4">
-                      <div className="input-group input-group-sm">
-                        <span className="input-group-text bg-light border-end-0">
-                          <i className="bi bi-search text-muted"></i>
+                <div className="card ornamental-border rounded-3 shadow-sm bg-white p-4">
+                  <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+                    <div>
+                      <h5 className="font-serif fw-bold text-indigo mb-0">Reservations & Guest Stays</h5>
+                      <small className="text-muted">Manage check-in status, verification, and payment confirmation</small>
+                    </div>
+
+                    <div className="d-flex flex-wrap align-items-center gap-2">
+                      <div className="input-group input-group-sm" style={{ width: '220px' }}>
+                        <span className="input-group-text bg-white border-end-0">
+                          <i className="bi bi-search text-gold"></i>
                         </span>
                         <input
                           type="text"
                           className="form-control border-start-0"
-                          placeholder="Search guest, email, room..."
+                          placeholder="Search guest or suite..."
                           value={bookingSearch}
                           onChange={(e) => setBookingSearch(e.target.value)}
                         />
                       </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="btn-group btn-group-sm w-100" role="group">
-                        {['All', 'Confirmed', 'Pending', 'Cancelled', 'Completed'].map((st) => (
-                          <button
-                            key={st}
-                            type="button"
-                            className={`btn ${bookingFilter === st ? 'btn-navy' : 'btn-outline-secondary'}`}
-                            onClick={() => setBookingFilter(st)}
-                          >
-                            {st}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="col-md-4 text-md-end text-muted small">
-                      Total Bookings: <strong>{filteredBookings.length}</strong>
+
+                      <select
+                        className="form-select form-select-sm"
+                        style={{ width: '140px' }}
+                        value={bookingFilter}
+                        onChange={(e) => setBookingFilter(e.target.value)}
+                      >
+                        <option value="All">All Statuses</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
                     </div>
                   </div>
 
                   <div className="table-responsive">
-                    <table className="table table-hover hotel-table align-middle">
+                    <table className="table table-luxury align-middle">
                       <thead>
                         <tr>
+                          <th>Reference</th>
                           <th>Guest Details</th>
-                          <th>Room</th>
-                          <th>Stay Range</th>
-                          <th>Total Price</th>
-                          <th>Booking Status</th>
-                          <th>Payment Status</th>
-                          <th className="text-end">Update</th>
+                          <th>Suite</th>
+                          <th>Dates</th>
+                          <th>Tariff</th>
+                          <th>Status</th>
+                          <th>Payment</th>
+                          <th className="text-end">Manage Status</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredBookings.map((b) => (
-                          <tr key={b._id}>
-                            <td>
-                              <strong className="text-dark">{b.user?.name || 'Guest'}</strong>
-                              <small className="text-muted d-block">{b.user?.email}</small>
-                              <small className="text-muted">{b.user?.phone || 'No phone'}</small>
-                            </td>
-                            <td>
-                              <strong>Room #{b.room?.roomNumber}</strong>
-                              <small className="text-muted d-block">{b.room?.type}</small>
-                            </td>
-                            <td>
-                              <small className="fw-semibold">
-                                {formatDate(b.checkIn)} &rarr; {formatDate(b.checkOut)}
-                              </small>
-                              <small className="text-muted d-block">
-                                {b.nights} night(s) &bull; {b.guests} guest(s)
-                              </small>
-                            </td>
-                            <td>
-                              <span className="fw-bold font-serif fs-6 text-navy">
-                                ₹{Number(b.totalPrice || 0).toLocaleString('en-IN')}
-                              </span>
-                            </td>
-                            <td>
-                              <select
-                                className="form-select form-select-sm"
-                                value={b.bookingStatus}
-                                onChange={(e) =>
-                                  handleUpdateBookingStatus(b._id, e.target.value, b.paymentStatus)
-                                }
-                              >
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Cancelled">Cancelled</option>
-                                <option value="Completed">Completed</option>
-                              </select>
-                            </td>
-                            <td>
-                              <select
-                                className="form-select form-select-sm"
-                                value={b.paymentStatus}
-                                onChange={(e) =>
-                                  handleUpdateBookingStatus(b._id, b.bookingStatus, e.target.value)
-                                }
-                              >
-                                <option value="Pending">Pending</option>
-                                <option value="Paid">Paid</option>
-                                <option value="Refunded">Refunded</option>
-                              </select>
-                            </td>
-                            <td className="text-end">
-                              <span className="badge bg-light text-secondary border">
-                                ID: ...{b._id.slice(-6)}
-                              </span>
+                        {filteredBookings.length === 0 ? (
+                          <tr>
+                            <td colSpan="8" className="text-center py-4 text-muted">
+                              No reservations match your filter criteria.
                             </td>
                           </tr>
-                        ))}
+                        ) : (
+                          filteredBookings.map((b) => (
+                            <tr key={b._id}>
+                              <td className="font-monospace small fw-bold text-charcoal">
+                                HP-{b._id?.toString().slice(-6).toUpperCase()}
+                              </td>
+                              <td>
+                                <div className="fw-semibold text-indigo small">{b.user?.name || 'Guest'}</div>
+                                <small className="text-muted d-block">{b.user?.email}</small>
+                                <small className="text-muted">{b.user?.phone || 'No phone'}</small>
+                              </td>
+                              <td>
+                                <div className="small fw-semibold">{b.room?.title}</div>
+                                <small className="text-muted">Suite #{b.room?.roomNumber}</small>
+                              </td>
+                              <td className="small">
+                                <div>{formatDate(b.checkIn)} &rarr; {formatDate(b.checkOut)}</div>
+                                <small className="text-muted">{b.nights} Night(s) &bull; {b.guests} Guests</small>
+                              </td>
+                              <td className="fw-bold font-serif text-indigo">
+                                ₹{Number(b.totalPrice || 0).toLocaleString('en-IN')}
+                              </td>
+                              <td>
+                                <span
+                                  className={`badge-status ${
+                                    b.bookingStatus === 'Confirmed'
+                                      ? 'badge-status-confirmed'
+                                      : b.bookingStatus === 'Cancelled'
+                                      ? 'badge-status-cancelled'
+                                      : b.bookingStatus === 'Completed'
+                                      ? 'badge-status-completed'
+                                      : 'badge-status-pending'
+                                  }`}
+                                >
+                                  {b.bookingStatus}
+                                </span>
+                              </td>
+                              <td>
+                                <span className="small text-muted fw-semibold">
+                                  {b.paymentStatus || 'Pending'}
+                                </span>
+                              </td>
+                              <td className="text-end">
+                                <div className="btn-group btn-group-sm">
+                                  {b.bookingStatus !== 'Confirmed' && (
+                                    <button
+                                      disabled={actionLoading}
+                                      onClick={() => handleUpdateBookingStatus(b._id, 'Confirmed', 'Paid')}
+                                      className="btn btn-outline-success py-1 px-2"
+                                      title="Confirm & Mark Paid"
+                                      style={{ fontSize: '0.75rem' }}
+                                    >
+                                      Confirm
+                                    </button>
+                                  )}
+                                  {b.bookingStatus !== 'Completed' && (
+                                    <button
+                                      disabled={actionLoading}
+                                      onClick={() => handleUpdateBookingStatus(b._id, 'Completed', 'Paid')}
+                                      className="btn btn-outline-indigo py-1 px-2"
+                                      title="Complete Stay"
+                                      style={{ fontSize: '0.75rem' }}
+                                    >
+                                      Complete
+                                    </button>
+                                  )}
+                                  {b.bookingStatus !== 'Cancelled' && (
+                                    <button
+                                      disabled={actionLoading}
+                                      onClick={() => handleUpdateBookingStatus(b._id, 'Cancelled', 'Refunded')}
+                                      className="btn btn-outline-danger py-1 px-2"
+                                      title="Cancel Reservation"
+                                      style={{ fontSize: '0.75rem' }}
+                                    >
+                                      Cancel
+                                    </button>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
                   </div>
                 </div>
               )}
 
-              {/* TAB 4: USERS MANAGEMENT */}
+              {/* TAB 4: GUEST DIRECTORY */}
               {activeTab === 'users' && (
-                <div className="card border-0 rounded-4 shadow-sm bg-white p-4">
-                  <h5 className="fw-bold font-serif mb-4 text-navy">Guest & Staff Directory ({users.length})</h5>
+                <div className="card ornamental-border rounded-3 shadow-sm bg-white p-4">
+                  <div className="mb-3">
+                    <h5 className="font-serif fw-bold text-indigo mb-0">Registered Guest Directory</h5>
+                    <small className="text-muted">Total registered users: {users.length}</small>
+                  </div>
 
                   <div className="table-responsive">
-                    <table className="table table-hover hotel-table align-middle">
+                    <table className="table table-luxury align-middle">
                       <thead>
                         <tr>
-                          <th>User</th>
+                          <th>Guest Name</th>
+                          <th>Email Address</th>
+                          <th>Contact</th>
                           <th>Role</th>
-                          <th>Phone</th>
-                          <th>Joined</th>
-                          <th>Total Bookings</th>
-                          <th>Total Spent</th>
-                          <th className="text-end">Role Privilege</th>
+                          <th>Registered Date</th>
+                          <th className="text-end">Permissions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {users.map((u) => (
                           <tr key={u._id}>
-                            <td>
-                              <div className="fw-bold text-dark">{u.name}</div>
-                              <small className="text-muted">{u.email}</small>
-                            </td>
+                            <td className="fw-semibold text-indigo">{u.name}</td>
+                            <td className="small text-muted">{u.email}</td>
+                            <td className="small">{u.phone || 'N/A'}</td>
                             <td>
                               <span
-                                className={`badge ${
-                                  u.role === 'admin' ? 'bg-warning text-dark' : 'bg-primary'
+                                className={`badge-status ${
+                                  u.role === 'admin'
+                                    ? 'badge-status-pending'
+                                    : 'badge-status-available'
                                 }`}
                               >
-                                {u.role}
+                                {u.role === 'admin' ? 'Administrator' : 'Guest'}
                               </span>
                             </td>
-                            <td className="small">{u.phone || 'N/A'}</td>
                             <td className="small text-muted">{formatDate(u.createdAt)}</td>
-                            <td>
-                              <span className="badge bg-light text-dark border">
-                                {u.bookingCount || 0} reservation(s)
-                              </span>
-                            </td>
-                            <td>
-                              <strong className="text-navy font-serif">
-                                ₹{Number(u.totalSpent || 0).toLocaleString('en-IN')}
-                              </strong>
-                            </td>
                             <td className="text-end">
                               <button
                                 disabled={actionLoading}
                                 onClick={() => handleToggleUserRole(u._id, u.role)}
-                                className={`btn btn-sm ${
-                                  u.role === 'admin'
-                                    ? 'btn-outline-danger'
-                                    : 'btn-outline-warning'
-                                }`}
+                                className="btn btn-sm btn-outline-indigo py-1 px-2"
+                                style={{ fontSize: '0.78rem' }}
                               >
-                                {u.role === 'admin' ? 'Revoke Admin' : 'Make Admin'}
+                                Make {u.role === 'admin' ? 'Customer' : 'Admin'}
                               </button>
                             </td>
                           </tr>
@@ -834,18 +895,20 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* ADD / EDIT ROOM MODAL */}
+      {/* Add / Edit Room Modal */}
       {showRoomModal && (
         <div
           className="modal fade show d-block"
+          style={{ backgroundColor: 'rgba(23, 39, 71, 0.65)' }}
           tabIndex="-1"
-          style={{ backgroundColor: 'rgba(0,0,0,0.65)' }}
+          role="dialog"
+          aria-modal="true"
         >
-          <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content rounded-4 border-0 shadow-lg">
-              <div className="modal-header bg-navy text-white py-3 px-4" style={{ background: 'var(--hotel-navy)' }}>
-                <h5 className="modal-title font-serif text-white">
-                  {isEditingRoom ? 'Edit Suite Specifications' : 'Add New Luxury Suite'}
+          <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div className="modal-content border-0 shadow-lg rounded-3 overflow-hidden">
+              <div className="modal-header bg-indigo px-4 py-3 border-0">
+                <h5 className="modal-title font-serif text-white fw-bold">
+                  {isEditingRoom ? `Edit Suite #${roomForm.roomNumber}` : 'Add New Indian Sanctuary Suite'}
                 </h5>
                 <button
                   type="button"
@@ -855,34 +918,34 @@ const AdminDashboard = () => {
               </div>
 
               <form onSubmit={handleSaveRoom}>
-                <div className="modal-body p-4">
+                <div className="modal-body p-4 bg-white">
                   <div className="row g-3">
                     <div className="col-md-4">
-                      <label className="form-label small fw-semibold">Room Number *</label>
+                      <label className="form-label">Room Number *</label>
                       <input
                         type="text"
                         required
                         className="form-control"
-                        placeholder="e.g. 401"
+                        placeholder="e.g. 101"
                         value={roomForm.roomNumber}
                         onChange={(e) => setRoomForm({ ...roomForm, roomNumber: e.target.value })}
                       />
                     </div>
 
                     <div className="col-md-8">
-                      <label className="form-label small fw-semibold">Suite Title *</label>
+                      <label className="form-label">Suite Title *</label>
                       <input
                         type="text"
                         required
                         className="form-control"
-                        placeholder="e.g. Sapphire Horizon Deluxe Suite"
+                        placeholder="e.g. Maharaja Royal Heritage Suite"
                         value={roomForm.title}
                         onChange={(e) => setRoomForm({ ...roomForm, title: e.target.value })}
                       />
                     </div>
 
                     <div className="col-md-4">
-                      <label className="form-label small fw-semibold">Room Type *</label>
+                      <label className="form-label">Room Type *</label>
                       <select
                         className="form-select"
                         value={roomForm.type}
@@ -897,7 +960,7 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="col-md-4">
-                      <label className="form-label small fw-semibold">Tariff Per Night (₹) *</label>
+                      <label className="form-label">Tariff Per Night (₹) *</label>
                       <input
                         type="number"
                         required
@@ -909,7 +972,7 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="col-md-4">
-                      <label className="form-label small fw-semibold">Max Capacity (Guests) *</label>
+                      <label className="form-label">Max Guest Capacity *</label>
                       <input
                         type="number"
                         required
@@ -922,29 +985,29 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="col-md-4">
-                      <label className="form-label small fw-semibold">Bed Type</label>
+                      <label className="form-label">Bed Type</label>
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="e.g. 1 King Bed"
+                        placeholder="e.g. 1 Royal King Bed"
                         value={roomForm.bedType}
                         onChange={(e) => setRoomForm({ ...roomForm, bedType: e.target.value })}
                       />
                     </div>
 
                     <div className="col-md-4">
-                      <label className="form-label small fw-semibold">Room Size (m²)</label>
+                      <label className="form-label">Living Space (m²)</label>
                       <input
                         type="number"
                         className="form-control"
-                        placeholder="45"
+                        placeholder="55"
                         value={roomForm.roomSize}
                         onChange={(e) => setRoomForm({ ...roomForm, roomSize: e.target.value })}
                       />
                     </div>
 
                     <div className="col-md-4">
-                      <label className="form-label small fw-semibold">Room Status</label>
+                      <label className="form-label">Inventory Status</label>
                       <select
                         className="form-select"
                         value={roomForm.status}
@@ -957,19 +1020,19 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="col-12">
-                      <label className="form-label small fw-semibold">Description *</label>
+                      <label className="form-label">Description *</label>
                       <textarea
                         rows="3"
                         required
                         className="form-control"
-                        placeholder="Describe the aesthetic, comforts, view, and unique aspects..."
+                        placeholder="Describe architectural inspiration, courtyards, furnishings, and view..."
                         value={roomForm.description}
                         onChange={(e) => setRoomForm({ ...roomForm, description: e.target.value })}
                       ></textarea>
                     </div>
 
                     <div className="col-12">
-                      <label className="form-label small fw-semibold">Image URLs (comma separated)</label>
+                      <label className="form-label">Image URLs (comma separated)</label>
                       <input
                         type="text"
                         className="form-control"
@@ -977,15 +1040,14 @@ const AdminDashboard = () => {
                         value={roomForm.images}
                         onChange={(e) => setRoomForm({ ...roomForm, images: e.target.value })}
                       />
-                      <small className="text-muted">Separate multiple image URLs with commas</small>
                     </div>
 
                     <div className="col-12">
-                      <label className="form-label small fw-semibold">Amenities (comma separated)</label>
+                      <label className="form-label">Amenities (comma separated)</label>
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="High-speed Wi-Fi, Ocean Balcony, Rainfall Shower, Mini Bar"
+                        placeholder="High-speed Wi-Fi, Royal Butler, Courtyard Balcony, Ayurvedic Bath"
                         value={roomForm.amenities}
                         onChange={(e) => setRoomForm({ ...roomForm, amenities: e.target.value })}
                       />
@@ -999,8 +1061,9 @@ const AdminDashboard = () => {
                           id="featuredCheck"
                           checked={roomForm.featured}
                           onChange={(e) => setRoomForm({ ...roomForm, featured: e.target.checked })}
+                          style={{ accentColor: 'var(--color-gold)' }}
                         />
-                        <label className="form-check-label small fw-semibold" htmlFor="featuredCheck">
+                        <label className="form-check-label small fw-semibold text-indigo" htmlFor="featuredCheck">
                           Feature this suite prominently on the Home Page
                         </label>
                       </div>
@@ -1008,10 +1071,10 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                <div className="modal-footer bg-light px-4 py-3">
+                <div className="modal-footer bg-light px-4 py-3 border-top" style={{ borderColor: 'rgba(37, 37, 37, 0.1)' }}>
                   <button
                     type="button"
-                    className="btn btn-outline-secondary"
+                    className="btn btn-outline-indigo"
                     onClick={() => setShowRoomModal(false)}
                   >
                     Cancel
@@ -1019,7 +1082,7 @@ const AdminDashboard = () => {
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="btn btn-navy px-4 fw-semibold"
+                    className="btn btn-indigo px-4 fw-semibold"
                   >
                     {actionLoading ? 'Saving Suite...' : 'Save Suite'}
                   </button>

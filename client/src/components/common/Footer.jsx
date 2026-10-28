@@ -14,117 +14,119 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-dark text-white pt-5 pb-4 mt-5">
+    <footer className="footer-hotelpro">
       <div className="container">
-        <div className="row g-4 mb-4">
-          {/* Brand Info */}
+        {/* Main Footer Content */}
+        <div className="row g-4 mb-5">
+          {/* Brand & Ethos */}
           <div className="col-lg-4 col-md-6">
-            <div className="d-flex align-items-center gap-2 mb-3">
-              <span className="fs-3">🏛️</span>
-              <span className="brand-title text-white">
-                Hotel<span style={{ color: 'var(--hotel-gold)' }}>Pro</span>
+            <Link to="/" className="text-decoration-none d-inline-block mb-3">
+              <span className="hotelpro-wordmark" style={{ color: '#FFFFFF' }}>
+                HOTEL<span style={{ color: 'var(--color-gold)', fontStyle: 'italic' }}>PRO</span>
               </span>
-            </div>
-            <p className="text-light opacity-75 small pe-lg-4 mb-2">
-              <strong>अतिथि देवो भव: (Atithi Devo Bhava)</strong> — Experience the timeless opulence of royal Indian hospitality. From regal palace suites overlooking lake vistas to restorative Ayurvedic wellness therapies.
+              <span className="hotelpro-submark" style={{ color: 'var(--color-gold-muted)' }}>
+                Sanctuary &bull; India
+              </span>
+            </Link>
+            <p className="small pe-lg-4 mb-3" style={{ color: 'rgba(247, 242, 232, 0.78)', lineHeight: '1.7' }}>
+              Rooted in the timeless Indian philosophy of <em>Atithi Devo Bhava</em> — where every traveler is welcomed as a divine presence. Extraordinary stays, artisanal architecture, and mindful hospitality across India's most evocative landscapes.
             </p>
-            <small className="text-warning d-block mb-3">
-              Udaipur &bull; Jaipur &bull; Kerala Backwaters &bull; Goa
-            </small>
-            <div className="d-flex gap-3 fs-5 text-light">
-              <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-facebook"></i></a>
-              <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-instagram"></i></a>
-              <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-twitter-x"></i></a>
-              <a href="#" className="text-light opacity-75 text-decoration-none hover-gold"><i className="bi bi-youtube"></i></a>
+            <div className="d-flex align-items-center gap-3 fs-5">
+              <a href="#instagram" aria-label="HotelPro Instagram" className="text-decoration-none">
+                <i className="bi bi-instagram"></i>
+              </a>
+              <a href="#facebook" aria-label="HotelPro Facebook" className="text-decoration-none">
+                <i className="bi bi-facebook"></i>
+              </a>
+              <a href="#pinterest" aria-label="HotelPro Pinterest" className="text-decoration-none">
+                <i className="bi bi-pinterest"></i>
+              </a>
+              <a href="#linkedin" aria-label="HotelPro LinkedIn" className="text-decoration-none">
+                <i className="bi bi-linkedin"></i>
+              </a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="col-lg-2 col-md-6">
-            <h6 className="text-uppercase fw-bold mb-3" style={{ color: 'var(--hotel-gold)' }}>
-              Explore
-            </h6>
+          {/* Stays & Destinations */}
+          <div className="col-lg-2 col-md-6 col-6">
+            <h6 className="mb-3">Explore Stays</h6>
             <ul className="list-unstyled d-flex flex-column gap-2 small">
-              <li><Link to="/" className="text-light text-decoration-none opacity-75">Home</Link></li>
-              <li><Link to="/rooms" className="text-light text-decoration-none opacity-75">Palaces & Suites</Link></li>
-              <li><Link to="/about" className="text-light text-decoration-none opacity-75">Royal Heritage</Link></li>
-              <li><Link to="/contact" className="text-light text-decoration-none opacity-75">Concierge & FAQ</Link></li>
-              <li><Link to="/dashboard" className="text-light text-decoration-none opacity-75">Guest Portal</Link></li>
+              <li><Link to="/rooms">All Palaces & Suites</Link></li>
+              <li><Link to="/rooms?type=Deluxe">Royal Deluxe Suites</Link></li>
+              <li><Link to="/rooms?type=Presidential">Kohinoor Penthouses</Link></li>
+              <li><Link to="/rooms?type=Suite">Backwaters Retreats</Link></li>
+              <li><Link to="/rooms?type=Double">Heritage Courtyards</Link></li>
+              <li><Link to="/rooms?type=Single">Vedic Solo Stays</Link></li>
             </ul>
           </div>
 
-          {/* Contact Details */}
-          <div className="col-lg-3 col-md-6">
-            <h6 className="text-uppercase fw-bold mb-3" style={{ color: 'var(--hotel-gold)' }}>
-              Palace Concierge
-            </h6>
-            <ul className="list-unstyled d-flex flex-column gap-2 small text-light opacity-75">
-              <li className="d-flex gap-2">
-                <i className="bi bi-geo-alt-fill text-warning"></i>
-                <span>HotelPro Grand Palace, Lake Pichola Road, Udaipur, Rajasthan 313001, India</span>
-              </li>
-              <li className="d-flex gap-2">
-                <i className="bi bi-telephone-fill text-warning"></i>
-                <span>+91 (0294) 555-4683 / +91 98110 23456</span>
-              </li>
-              <li className="d-flex gap-2">
-                <i className="bi bi-envelope-fill text-warning"></i>
-                <span>namaste@hotelpro.in</span>
-              </li>
-              <li className="d-flex gap-2">
-                <i className="bi bi-clock-fill text-warning"></i>
-                <span>24/7 Royal Khidmatgar & Front Desk</span>
-              </li>
+          {/* Hospitality & Experiences */}
+          <div className="col-lg-2 col-md-6 col-6">
+            <h6 className="mb-3">Our Sanctuary</h6>
+            <ul className="list-unstyled d-flex flex-column gap-2 small">
+              <li><Link to="/about">Our Story</Link></li>
+              <li><a href="/#experiences">Indian Experiences</a></li>
+              <li><Link to="/about#architecture">Heritage Craft</Link></li>
+              <li><Link to="/contact">Concierge Desk</Link></li>
+              <li><Link to="/dashboard">My Reservations</Link></li>
             </ul>
           </div>
 
-          {/* Newsletter Form */}
-          <div className="col-lg-3 col-md-6">
-            <h6 className="text-uppercase fw-bold mb-3" style={{ color: 'var(--hotel-gold)' }}>
-              Royal Privileges
-            </h6>
-            <p className="text-light opacity-75 small">
-              Join the HotelPro Royal Circle for festive season privileges, heritage retreat invitations, and member tariffs.
+          {/* Concierge & Royal Newsletter */}
+          <div className="col-lg-4 col-md-6">
+            <h6 className="mb-3">Palace Concierge Desk</h6>
+            <ul className="list-unstyled d-flex flex-column gap-2 small mb-4" style={{ color: 'rgba(247, 242, 232, 0.78)' }}>
+              <li className="d-flex align-items-start gap-2">
+                <i className="bi bi-geo-alt text-gold mt-1"></i>
+                <span>Lake Pichola Road, Udaipur, Rajasthan 313001, India</span>
+              </li>
+              <li className="d-flex align-items-center gap-2">
+                <i className="bi bi-telephone text-gold"></i>
+                <span>+91 (0294) 555-4683 &bull; 24/7 Desk</span>
+              </li>
+              <li className="d-flex align-items-center gap-2">
+                <i className="bi bi-envelope text-gold"></i>
+                <span>concierge@hotelpro.in</span>
+              </li>
+            </ul>
+
+            <h6 className="mb-2" style={{ fontSize: '0.85rem' }}>The Curated Gazette</h6>
+            <p className="small mb-2" style={{ color: 'rgba(247, 242, 232, 0.7)' }}>
+              Occasional notes on Indian heritage journeys, seasonal harvests, and private tariffs.
             </p>
             {subscribed ? (
-              <div className="alert alert-success py-2 px-3 small rounded-3">
-                <i className="bi bi-check-circle me-1"></i> Namaste! Welcome to Royal Privileges.
+              <div className="p-2 small rounded" style={{ background: 'rgba(197, 164, 109, 0.2)', border: '1px solid var(--color-gold)', color: 'var(--color-ivory)' }}>
+                <i className="bi bi-check2-circle me-1 text-gold"></i>
+                <span>Namaste. You are now subscribed to our private gazette.</span>
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="d-flex flex-column gap-2">
-                <div className="input-group">
-                  <input
-                    type="email"
-                    required
-                    className="form-control form-control-sm"
-                    placeholder="Enter email address"
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                  />
-                  <button className="btn btn-gold btn-sm" type="submit">
-                    Join
-                  </button>
-                </div>
-                <small className="text-muted" style={{ fontSize: '0.75rem' }}>
-                  Compliant with Indian digital privacy guidelines.
-                </small>
+              <form onSubmit={handleSubscribe} className="d-flex gap-2">
+                <input
+                  type="email"
+                  required
+                  className="form-control form-control-sm"
+                  placeholder="Enter your email"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  style={{ background: 'rgba(255, 255, 255, 0.08)', color: '#FFFFFF', borderColor: 'rgba(197, 164, 109, 0.3)' }}
+                />
+                <button type="submit" className="btn btn-gold btn-sm px-3">
+                  Join
+                </button>
               </form>
             )}
           </div>
         </div>
 
-        <hr className="border-secondary opacity-25 my-4" />
-
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 small text-light opacity-75">
-          <p className="mb-0">
-            &copy; {new Date().getFullYear()} HotelPro Palaces & Resorts Pvt. Ltd. All rights reserved. GST Registered.
+        {/* Bottom Bar */}
+        <div className="pt-4 border-top d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 small" style={{ borderColor: 'rgba(255, 255, 255, 0.1) !important' }}>
+          <p className="mb-0" style={{ color: 'rgba(247, 242, 232, 0.6)' }}>
+            &copy; {new Date().getFullYear()} HotelPro India Hospitality Pvt. Ltd. All rights reserved.
           </p>
-          <div className="d-flex gap-3">
-            <a href="#privacy" className="text-light text-decoration-none">Privacy Policy</a>
-            <span>&bull;</span>
-            <a href="#terms" className="text-light text-decoration-none">Terms of Stay</a>
-            <span>&bull;</span>
-            <a href="#tariffs" className="text-light text-decoration-none">Govt ID Norms</a>
+          <div className="d-flex gap-4" style={{ color: 'rgba(247, 242, 232, 0.6)' }}>
+            <Link to="/about" className="text-decoration-none">Hospitality Code</Link>
+            <Link to="/contact" className="text-decoration-none">Guest Privacy</Link>
+            <Link to="/contact" className="text-decoration-none">Terms of Stay</Link>
           </div>
         </div>
       </div>

@@ -3,11 +3,25 @@ import React from 'react';
 const AlertMessage = ({ variant = 'info', message, dismissible = true, onClose }) => {
   if (!message) return null;
 
+  const getBorderColor = () => {
+    switch (variant) {
+      case 'danger':
+        return '#C5221F';
+      case 'success':
+        return '#137333';
+      case 'warning':
+        return '#B06000';
+      default:
+        return 'var(--color-gold)';
+    }
+  };
+
   return (
     <div
       className={`alert alert-${variant} ${
         dismissible ? 'alert-dismissible fade show' : ''
       } d-flex align-items-center shadow-sm rounded-3`}
+      style={{ borderLeftWidth: '4px', borderLeftColor: getBorderColor() }}
       role="alert"
     >
       <i
@@ -21,7 +35,7 @@ const AlertMessage = ({ variant = 'info', message, dismissible = true, onClose }
             : 'bi-info-circle-fill text-primary'
         }`}
       ></i>
-      <div className="flex-grow-1">{message}</div>
+      <div className="flex-grow-1 small">{message}</div>
       {dismissible && (
         <button
           type="button"
